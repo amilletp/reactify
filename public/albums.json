@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Chip off the old block",
+    "artist": "Blair",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Battle grounds",
+    "artist": "Florian",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Decisions decisions",
+    "artist": "Skylar",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Blank canvas",
+    "artist": "Skylar",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Ice cold",
+    "artist": "Kimberley",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Honesty",
+    "artist": "Ted Garrett",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Creative director",
+    "artist": "Delaney",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 8,
+    "name": "No guarantees",
+    "artist": "Kimberley",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Don't push this button",
+    "artist": "Delaney",
+    "cover": "/images/cover.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Cherry",
+    "artist": "Stacy",
+    "cover": "/images/cover.jpg"
+  }
+]

@@ -1,0 +1,50 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+
+const styles = {
+  root: {
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
+    backgroundColor: "white",
+    flexGrow: 1
+  }
+};
+
+const TopBar = props => {
+  const { classes } = props;
+  const [value, setValue] = useState(0);
+  const handleChange = (event, value) => {
+    setValue(value);
+  };
+  const array = [1];
+  return (
+    <Paper className={classes.root}>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+      >
+        <Tab label="Inicio" component={Link} to="/" />
+        <Tab label="Álbums" component={Link} to="/albums" />
+        <Tab label="Álbum" component={Link} to="/album" />
+        <Tab label="Reproductor" component={Link} to="/player" />
+        <Tab label="Inicio de sesión" component={Link} to="/login" />
+        <Tab label="Perfil de usuario" component={Link} to="/profile" />
+      </Tabs>
+    </Paper>
+  );
+};
+
+TopBar.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(TopBar);

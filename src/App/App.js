@@ -1,7 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import TopBar from "./components/TopBar";
+import CardsGrid from "./components/CardsGrid";
+import CardDetail from "./components/CardDetail";
+import SongsGrid from "./components/SongsGrid";
+import SongCard from "./components/SongCard";
+import UserProfile from "./components/UserProfile";
+import UserLogin from "./components/UserLogin";
 
 // Css
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -9,50 +17,82 @@ class App extends Component {
 
     this.state = {
       loading: true,
-      albums: []
-    }
+      albums: [],
+      songs: []
+    };
   }
 
   async componentDidMount() {
     try {
-      const res = await fetch('/albums');
-      const json = await res.json();
-      this.setState((prevState) => ({
+      let res = await fetch("albums.json");
+      //const res = await fetch('/albums');
+      const albums = await res.json();
+      res = await fetch("songs.json");
+      //const res = await fetch('/albums');
+      const songs = await res.json();
+      this.setState(prevState => ({
         ...prevState,
         loading: false,
-        albums: json
+        albums,
+        songs
       }));
-    } catch(err) {
+    } catch (err) {
       console.error("Error accediendo al servidor", err);
     }
   }
 
+  findSong(id) {
+    let result = this.state.songs.find(song => song.id === id);
+    result = result === undefined ? [] : [result];
+    return result;
+  }
+
+  //         <CardsGrid albums={this.state.albums} songs={this.state.songs} />
+  //        <CardDetail
+  //          albums={this.state.albums.filter(album => album.id === 1)}
+  //          songs={this.state.songs.filter(song => song.album_id === 1)}
+  //        />
+  //        <SongsGrid albums={this.state.albums} songs={this.state.songs} />
+  //        <SongCard
+  //          albums={this.state.albums}
+  //          songs={this.findSong(1)}
+  //        />
+
+  // https://codepen.io/asommer70/pen/JGdGge
   render() {
     return (
       <div className="App">
-        <h1>Plantilla de la práctica final!</h1>
-        <p>
-          Esta plantilla contiene todo lo necesario para comenzar a
-          desarrollar la práctica final. Antes de comenzar a desarrollar,
-          lee la documentación de la práctica y el fichero README.md de
-          este repositorio.
-        </p>
-        <h2>Servidor de desarrollo</h2>
-        <p>
-          El proyecto está preconfigurado con un servidor de desarrollo basado
-          en json-server:
-        </p>
-          { this.state.loading ?
-            <p>Cargando...</p>
-            : <ul>
-              {this.state.albums.map(album => <li key={album.id}>{album.name}</li>)}
-            </ul>
-          }
-        <h2>¿Dudas?</h2>
-        <p>
-          No olvides pasarte por el foro si tienes alguna duda sobre la práctica final
-          o la plantilla :).
-        </p>
+        <Router>
+          <TopBar />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={props => <SongsGrid {...this.state} />}
+            />
+            <Route
+              path="/albums"
+              render={props => <CardsGrid {...this.state} />}
+            />
+            <Route
+              path="/album"
+              render={props => (
+                <CardDetail
+                  albums={this.state.albums.filter(album => album.id === 1)}
+                  songs={this.state.songs.filter(song => song.album_id === 1)}
+                />
+              )}
+            />
+            <Route
+              path="/player"
+              render={props => (
+                <SongCard albums={this.state.albums} songs={this.findSong(1)} />
+              )}
+            />
+            <Route path="/login" component={UserLogin} />
+            <Route path="/profile" component={UserProfile} />
+          </Switch>
+        </Router>
       </div>
     );
   }
