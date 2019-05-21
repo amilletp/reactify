@@ -37,7 +37,7 @@ class App extends Component {
       //const res = await fetch('/albums');
       const albums = await res.json();
       res = await fetch("songs.json");
-      //const res = await fetch('/albums');
+      //const res = await fetch('/songs');
       const songs = await res.json();
       this.setState(prevState => ({
         ...prevState,

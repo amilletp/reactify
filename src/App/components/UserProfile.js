@@ -25,8 +25,8 @@ const styles = theme => ({
   buttonContainer: {
     width: "62%",
     marginTop: 9
-  },
-})
+  }
+});
 
 const UserProfile = props => {
   const { classes } = props;
@@ -35,7 +35,7 @@ const UserProfile = props => {
     name: userContext.name,
     surname: userContext.surname,
     email: userContext.email
-  })
+  });
 
   const handleChange = field => event => {
     let modifiedUser = { ...user };
@@ -47,10 +47,10 @@ const UserProfile = props => {
   };
 
   const handleSaveProfile = () => {
-    userContext.name = user.name
-    userContext.surname = user.surname
-    userContext.email = user.email
-  }
+    userContext.name = user.name;
+    userContext.surname = user.surname;
+    userContext.email = user.email;
+  };
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -81,16 +81,16 @@ const UserProfile = props => {
         margin="normal"
         variant="outlined"
       />
-        <div className={classes.buttonContainer}>
-          <Button
-            onClick={handleSaveProfile}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Guardar
-          </Button>
-        </div>      
+      <div className={classes.buttonContainer}>
+        <Button
+          onClick={handleSaveProfile}
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
+          Guardar
+        </Button>
+      </div>
     </form>
   );
 };
