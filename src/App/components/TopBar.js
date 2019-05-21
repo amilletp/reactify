@@ -16,13 +16,40 @@ const styles = {
   }
 };
 
+const getInitialValueByPath = () => {
+  let initialValue;
+  switch (window.location.pathname) {
+    case "/":
+      initialValue = 0;
+      break;
+    case "/albums":
+      initialValue = 1;
+      break;
+    case "/album":
+      initialValue = 2;
+      break;
+    case "/player":
+      initialValue = 3;
+      break;
+    case "/login":
+      initialValue = 4;
+      break;
+    case "/profile":
+      initialValue = 5;
+      break;
+    default:
+      initialValue = 0;
+  }
+  return initialValue;
+};
+
 const TopBar = props => {
   const { classes } = props;
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(getInitialValueByPath());
   const handleChange = (event, value) => {
     setValue(value);
   };
-  const array = [1];
+
   return (
     <Paper className={classes.root}>
       <Tabs

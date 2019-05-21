@@ -106,7 +106,7 @@ const CardsGrid = props => {
                   songs={songs.filter(song => song.album_id === tile.id)}
                 />
               </CardContent>
-              <CardActions className={classes.actions} disableActionSpacing>
+              <CardActions className={classes.actions}>
                 <IconButton aria-label="Add to favorites">
                   <FavoriteIcon />
                 </IconButton>

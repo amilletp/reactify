@@ -1,28 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { Button } from "@material-ui/core";
+import UserContext from "../contexts/user";
 
 const styles = theme => ({
   container: {
     display: "flex",
-    paddingLeft: "35%",
+    paddingLeft: "33%",
     flexWrap: "wrap",
     backgroundColor: theme.palette.background.paper
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
-  }
-});
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  },
+  button: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 223,
+    height: 50
+  },
+  buttonContainer: {
+    width: "62%",
+    marginTop: 9
+  },
+})
 
 const UserProfile = props => {
   const { classes } = props;
+  let userContext = useContext(UserContext);
   const [user, setUser] = useState({
-    name: "",
-    surname: "",
-    email: ""
-  });
+    name: userContext.name,
+    surname: userContext.surname,
+    email: userContext.email
+  })
 
   const handleChange = field => event => {
     let modifiedUser = { ...user };
@@ -32,6 +45,12 @@ const UserProfile = props => {
     //      [name]: event.target.value
     //    });
   };
+
+  const handleSaveProfile = () => {
+    userContext.name = user.name
+    userContext.surname = user.surname
+    userContext.email = user.email
+  }
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -62,6 +81,16 @@ const UserProfile = props => {
         margin="normal"
         variant="outlined"
       />
+        <div className={classes.buttonContainer}>
+          <Button
+            onClick={handleSaveProfile}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            Guardar
+          </Button>
+        </div>      
     </form>
   );
 };

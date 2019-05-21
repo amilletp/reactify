@@ -7,9 +7,11 @@ import SongsGrid from "./components/SongsGrid";
 import SongCard from "./components/SongCard";
 import UserProfile from "./components/UserProfile";
 import UserLogin from "./components/UserLogin";
+import PrivateRoute from "./components/PrivateRoute";
 
 // Css
 import "./App.css";
+import UserContext from "./contexts/user";
 
 class App extends Component {
   constructor(props) {
@@ -19,6 +21,13 @@ class App extends Component {
       loading: true,
       albums: [],
       songs: []
+    };
+
+    this.initialContext = {
+      name: "",
+      surname: "",
+      email: "",
+      signedIn: false
     };
   }
 
@@ -63,35 +72,40 @@ class App extends Component {
     return (
       <div className="App">
         <Router>
-          <TopBar />
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={props => <SongsGrid {...this.state} />}
-            />
-            <Route
-              path="/albums"
-              render={props => <CardsGrid {...this.state} />}
-            />
-            <Route
-              path="/album"
-              render={props => (
-                <CardDetail
-                  albums={this.state.albums.filter(album => album.id === 1)}
-                  songs={this.state.songs.filter(song => song.album_id === 1)}
-                />
-              )}
-            />
-            <Route
-              path="/player"
-              render={props => (
-                <SongCard albums={this.state.albums} songs={this.findSong(1)} />
-              )}
-            />
-            <Route path="/login" component={UserLogin} />
-            <Route path="/profile" component={UserProfile} />
-          </Switch>
+          <UserContext.Provider value={this.initialContext}>
+            <TopBar />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => <SongsGrid {...this.state} />}
+              />
+              <Route
+                path="/albums"
+                render={props => <CardsGrid {...this.state} />}
+              />
+              <Route
+                path="/album"
+                render={props => (
+                  <CardDetail
+                    albums={this.state.albums.filter(album => album.id === 1)}
+                    songs={this.state.songs.filter(song => song.album_id === 1)}
+                  />
+                )}
+              />
+              <Route
+                path="/player"
+                render={props => (
+                  <SongCard
+                    albums={this.state.albums}
+                    songs={this.findSong(1)}
+                  />
+                )}
+              />
+              <Route path="/login" component={UserLogin} />
+              <PrivateRoute path="/profile" component={UserProfile} />
+            </Switch>
+          </UserContext.Provider>
         </Router>
       </div>
     );
