@@ -31,6 +31,7 @@ const styles = theme => ({
     minWidth: "auto"
   },
   row: {
+    cursor: "pointer",
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.background.default
     }

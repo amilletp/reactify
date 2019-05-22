@@ -16,7 +16,7 @@ import red from "@material-ui/core/colors/red";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SongsTable from "./SongsTable";
+import SongsTable from "../SongsTable";
 
 const styles = theme => ({
   root: {
@@ -106,13 +106,7 @@ const WithGridList = (WrappedComponent, props) => {
           <GridListTile key="Subheader" cols={gridListCols}>
             <ListSubheader component="div">{titleLabel}</ListSubheader>
           </GridListTile>
-          {items.map(tile => (
-            <GridListTile key={tile.id} className={classes.gridListTile}>
-              <Card className={classes.card}>
-                <WrappedComponent classes tile songs />
-              </Card>
-            </GridListTile>
-          ))}
+          <WrappedComponent classes={classes} items={items} songs={songs} />
         </GridList>
       </div>
     );
@@ -123,4 +117,7 @@ WithGridList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(WithGridList);
+export default withStyles(styles, { withTheme: true });
+//export default WithGridList;
+
+//withStyles(styles)(CardsGrid);

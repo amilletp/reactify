@@ -1,4 +1,10 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useContext,
+  Fragment,
+  useRef,
+  useEffect
+} from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -45,14 +51,14 @@ const UserLogin = ({ classes, location }) => {
     denied: false
   });
 
-  //const [signedIn, setSignedIn] = useState(false);
+  let userContext = useContext(UserContext);
+
+  //const loginFieldRef = useRef();
 
   const updateLoginState = (field, value) => {
     login[field] = value;
     setLogin({ ...login });
   };
-
-  let userContext = useContext(UserContext);
 
   const handleChange = field => event => {
     updateLoginState(field, event.target.value);
@@ -67,6 +73,8 @@ const UserLogin = ({ classes, location }) => {
     });
     userContext.signedIn = login.login === "test" && login.password === "pwd";
   };
+
+  //useEffect(() => loginFieldRef.current.firstChild.focus());
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -107,6 +115,7 @@ const UserLogin = ({ classes, location }) => {
               onChange={handleChange("login")}
               margin="normal"
               variant="outlined"
+              //ref={loginFieldRef}
             />
             <TextField
               required

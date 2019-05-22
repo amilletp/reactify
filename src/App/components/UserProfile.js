@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -37,6 +37,8 @@ const UserProfile = props => {
     email: userContext.email
   });
 
+  //const nameFieldRef = useRef();
+
   const handleChange = field => event => {
     let modifiedUser = { ...user };
     modifiedUser[field] = event.target.value;
@@ -52,6 +54,8 @@ const UserProfile = props => {
     userContext.email = user.email;
   };
 
+  //useEffect(() => nameFieldRef.current.firstChild.focus());
+
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <TextField
@@ -62,6 +66,7 @@ const UserProfile = props => {
         onChange={handleChange("name")}
         margin="normal"
         variant="outlined"
+        //ref={nameFieldRef}
       />
       <TextField
         id="outlined-surname"

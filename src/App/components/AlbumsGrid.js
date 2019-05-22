@@ -64,7 +64,7 @@ const styles = theme => ({
   }
 });
 
-const CardsGrid = props => {
+const AlbumsGrid = props => {
   const { classes, albums, songs } = props;
 
   return (
@@ -123,8 +123,8 @@ const CardsGrid = props => {
   );
 };
 
-CardsGrid.propTypes = {
+AlbumsGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CardsGrid);
+export default withStyles(styles)(AlbumsGrid);

@@ -18,18 +18,13 @@ const styles = {
 
 const getInitialValueByPath = () => {
   let initialValue;
-  switch (window.location.pathname) {
+  let path = window.location.pathname;
+  switch (path) {
     case "/":
       initialValue = 0;
       break;
     case "/albums":
       initialValue = 1;
-      break;
-    case "/album":
-      initialValue = 2;
-      break;
-    case "/player":
-      initialValue = 3;
       break;
     case "/login":
       initialValue = 4;
@@ -38,7 +33,13 @@ const getInitialValueByPath = () => {
       initialValue = 5;
       break;
     default:
-      initialValue = 0;
+      if (path.match(/\/album\/\d{1,}/)) {
+        initialValue = 2;
+      } else if (path.match(/\/player\/\d{1,}/)) {
+        initialValue = 3;
+      } else {
+        initialValue = 0;
+      }
   }
   return initialValue;
 };

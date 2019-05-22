@@ -1,23 +1,19 @@
 import React, { useState, Fragment } from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton";
-import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
+import Card from "@material-ui/core/CardHeader";
+import GridListTile from "@material-ui/core/GridListTile";
 import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import red from "@material-ui/core/colors/red";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SongsTable from "./SongsTable";
-import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+import red from "@material-ui/core/colors/red";
+import SongsTable from "../SongsTable";
+import WithGridList from "./WithGridList";
 
 const styles = theme => ({
   root: {
@@ -31,12 +27,12 @@ const styles = theme => ({
     width: "63%",
     height: "auto"
   },
+  gridListTile: {},
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
   },
   card: {
-    maxWidth: 400,
-    textDecoration: "none"
+    maxWidth: 400
   },
   cardContent: {
     padding: 0
@@ -59,18 +55,15 @@ const styles = theme => ({
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500],
-    textDecoration: "none"
+    backgroundColor: red[500]
   }
 });
 
-const AlbumCardsGrid = props => {
-  const { classes, items, songs } = props;
-
+const AlbumsCardsGrid = ({ classes, items, songs }) => {
   return (
     <Fragment>
       {items.map(tile => (
-        <GridListTile key={tile.id}>
+        <GridListTile key={tile.id} className={classes.gridListTile}>
           <Card className={classes.card}>
             <CardHeader
               avatar={
@@ -83,8 +76,6 @@ const AlbumCardsGrid = props => {
                   <MoreVertIcon />
                 </IconButton>
               }
-              component={Link}
-              to={`/albums/${tile.id}`}
               title={tile.name}
               subheader={tile.artist}
             />
@@ -113,8 +104,9 @@ const AlbumCardsGrid = props => {
   );
 };
 
-AlbumCardsGrid.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+//export default WithGridList(AlbumsCardsGrid);
 
-export default withStyles(styles)(AlbumCardsGrid);
+//export default WithGridList(withStyles(styles, { withTheme: true }));
+//export default WithGridList(AlbumsCardsGrid);
+
+export default WithGridList(AlbumsCardsGrid);

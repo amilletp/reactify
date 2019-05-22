@@ -17,6 +17,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   root: {
@@ -27,14 +28,15 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper
   },
   gridList: {
-    width: "50%",
+    width: "63%",
     height: "auto"
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
   },
   card: {
-    maxWidth: "98%"
+    maxWidth: 400,
+    textDecoration: "none"
   },
   cardContent: {
     padding: 0
@@ -57,74 +59,43 @@ const styles = theme => ({
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500]
+    backgroundColor: red[500],
+    textDecoration: "none"
   }
 });
 
-function CardDetail(props) {
-  const { classes, match } = props;
-  let { albums, songs } = props;
-
-  const id = parseInt(match.params.id, 10);
-  albums = albums.filter(album => album.id === id);
-  songs = songs.filter(song => song.album_id === id);
+const BaseGridList = props => {
+  const {
+    component: WrappedComponent,
+    classes,
+    gridListCols,
+    items,
+    songs
+  } = props;
 
   return (
     <div className={classes.root}>
       <GridList
-        cols={1}
+        cols={gridListCols}
         spacing={12}
-        cellHeight={1100}
+        cellHeight={620}
         className={classes.gridList}
       >
-        <GridListTile key="Subheader" cols={1} style={{ height: "auto" }}>
-          <ListSubheader component="div">Álbum</ListSubheader>
+        <GridListTile
+          key="Subheader"
+          cols={gridListCols}
+          style={{ height: "auto" }}
+        >
+          <ListSubheader component="div">Álbums</ListSubheader>
         </GridListTile>
-        {albums.map(tile => (
-          <GridListTile key={tile.id}>
-            <Card className={classes.card}>
-              <CardHeader
-                avatar={
-                  <Avatar aria-label="Album" className={classes.avatar}>
-                    A
-                  </Avatar>
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                title={tile.name}
-                subheader={tile.artist}
-              />
-              <CardMedia
-                className={classes.media}
-                image={tile.cover}
-                title={tile.name}
-              />
-              <CardContent className={classes.cardContent}>
-                <SongsTable
-                  songs={songs.filter(song => song.album_id === tile.id)}
-                />
-              </CardContent>
-              <CardActions className={classes.actions}>
-                <IconButton aria-label="Add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="Share">
-                  <ShareIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </GridListTile>
-        ))}
+        <WrappedComponent classes={classes} items={items} songs={songs} />
       </GridList>
     </div>
   );
-}
+};
 
-CardDetail.propTypes = {
+BaseGridList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CardDetail);
+export default withStyles(styles)(BaseGridList);

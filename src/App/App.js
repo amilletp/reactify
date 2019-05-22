@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import TopBar from "./components/TopBar";
-import CardsGrid from "./components/CardsGrid";
-import CardDetail from "./components/CardDetail";
-import SongsGrid from "./components/SongsGrid";
-import SongCard from "./components/SongCard";
 import UserProfile from "./components/UserProfile";
 import UserLogin from "./components/UserLogin";
 import PrivateRoute from "./components/PrivateRoute";
+import UserContext from "./contexts/user";
 
 // Css
 import "./App.css";
-import UserContext from "./contexts/user";
+
+const SongsGrid = React.lazy(() => import("./components/SongsGrid"));
+const AlbumsGrid = React.lazy(() => import("./components/AlbumsGrid"));
+const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
+const SongDetail = React.lazy(() => import("./components/SongDetail"));
 
 class App extends Component {
   constructor(props) {
@@ -64,47 +65,51 @@ class App extends Component {
   // https://codepen.io/asommer70/pen/JGdGge
   render() {
     return (
-      <div className="App">
-        <Router>
-          <UserContext.Provider value={this.initialContext}>
-            <TopBar />
-            <Switch>
-              <Route
-                exact
-                path="/"
-                render={props => <SongsGrid {...this.state} />}
-              />
-              <Route
-                exact
-                path="/albums"
-                render={props => <CardsGrid {...this.state} />}
-              />
-              <Route
-                path="/albums/:id"
-                render={routerProps => (
-                  <CardDetail
-                    albums={this.state.albums}
-                    songs={this.state.songs}
-                    {...routerProps}
+      <React.StrictMode>
+        <React.Suspense fallback="Cargando la aplicación">
+          <div className="App">
+            <Router>
+              <UserContext.Provider value={this.initialContext}>
+                <TopBar />
+                <Switch>
+                  <Route
+                    exact
+                    path="/"
+                    render={props => <SongsGrid {...this.state} />}
                   />
-                )}
-              />
-              <Route
-                path="/player/:id"
-                render={routerProps => (
-                  <SongCard
-                    albums={this.state.albums}
-                    songs={this.state.songs}
-                    {...routerProps}
+                  <Route
+                    exact
+                    path="/albums"
+                    render={props => <AlbumsGrid {...this.state} />}
                   />
-                )}
-              />
-              <Route path="/login" component={UserLogin} />
-              <PrivateRoute path="/profile" component={UserProfile} />
-            </Switch>
-          </UserContext.Provider>
-        </Router>
-      </div>
+                  <Route
+                    path="/albums/:id"
+                    render={routerProps => (
+                      <AlbumDetail
+                        albums={this.state.albums}
+                        songs={this.state.songs}
+                        {...routerProps}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/player/:id"
+                    render={routerProps => (
+                      <SongDetail
+                        albums={this.state.albums}
+                        songs={this.state.songs}
+                        {...routerProps}
+                      />
+                    )}
+                  />
+                  <Route path="/login" component={UserLogin} />
+                  <PrivateRoute path="/profile" component={UserProfile} />
+                </Switch>
+              </UserContext.Provider>
+            </Router>
+          </div>
+        </React.Suspense>
+      </React.StrictMode>
     );
   }
 }

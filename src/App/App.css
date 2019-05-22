@@ -14,3 +14,7 @@ a {
   text-decoration: unset;
   color: initial;
 }
+
+audio.floating {
+  width: 182%;
+}

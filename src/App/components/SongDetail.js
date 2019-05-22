@@ -80,7 +80,7 @@ const findSong = (songs, id) => {
   return result;
 };
 
-const SongCard = props => {
+const SongDetail = props => {
   const { classes, match } = props;
   let { albums, songs } = props;
   songs = findSong(songs, match.params.id);
@@ -92,6 +92,11 @@ const SongCard = props => {
     };
     return [...result, song];
   }, []);
+
+  const handlePlay = e => {
+    e.target.className = "pepito";
+    console.log(e.target);
+  };
 
   return (
     <div className={classes.root}>
@@ -124,12 +129,14 @@ const SongCard = props => {
                     {tile.album.name}
                   </Typography>
                 </CardContent>
-                <audio className={classes.audio} controls>
-                  <source
-                    src="/music/funky_energy_loop.mp3"
-                    type="audio/mpeg"
-                  />
-                </audio>
+                <div>
+                  <audio className={classes.audio} onPlay={handlePlay} controls>
+                    <source
+                      src="/music/funky_energy_loop.mp3"
+                      type="audio/mpeg"
+                    />
+                  </audio>
+                </div>
               </div>
               <CardMedia
                 className={classes.cover}
@@ -144,9 +151,9 @@ const SongCard = props => {
   );
 };
 
-SongCard.propTypes = {
+SongDetail.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(SongCard);
+export default withStyles(styles, { withTheme: true })(SongDetail);
