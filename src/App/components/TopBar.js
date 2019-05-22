@@ -27,16 +27,14 @@ const getInitialValueByPath = () => {
       initialValue = 1;
       break;
     case "/login":
-      initialValue = 4;
+      initialValue = 3;
       break;
     case "/profile":
-      initialValue = 5;
+      initialValue = 4;
       break;
     default:
-      if (path.match(/\/album\/\d{1,}/)) {
+      if (path.match(/\/player\/\d{1,}/)) {
         initialValue = 2;
-      } else if (path.match(/\/player\/\d{1,}/)) {
-        initialValue = 3;
       } else {
         initialValue = 0;
       }

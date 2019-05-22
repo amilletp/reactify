@@ -84,7 +84,7 @@ const AlbumsGrid = props => {
               <CardHeader
                 avatar={
                   <Avatar aria-label="Album" className={classes.avatar}>
-                    A
+                    {tile.name.charAt(0)}
                   </Avatar>
                 }
                 action={

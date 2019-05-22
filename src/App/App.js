@@ -5,14 +5,20 @@ import UserProfile from "./components/UserProfile";
 import UserLogin from "./components/UserLogin";
 import PrivateRoute from "./components/PrivateRoute";
 import UserContext from "./contexts/user";
+import SongsGrid from "./components/SongsGrid";
+import AlbumsGrid from "./components/AlbumsGrid";
+import AlbumDetail from "./components/AlbumDetail";
+import SongDetail from "./components/SongDetail";
 
 // Css
 import "./App.css";
 
-const SongsGrid = React.lazy(() => import("./components/SongsGrid"));
-const AlbumsGrid = React.lazy(() => import("./components/AlbumsGrid"));
-const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
-const SongDetail = React.lazy(() => import("./components/SongDetail"));
+// Rompen la barra de navegacion en los primeros 5 o 10 segs de entrar a la app
+// despues vuelve a funcnionar
+//const SongsGrid = React.lazy(() => import("./components/SongsGrid"));
+//const AlbumsGrid = React.lazy(() => import("./components/AlbumsGrid"));
+//const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
+//const SongDetail = React.lazy(() => import("./components/SongDetail"));
 
 class App extends Component {
   constructor(props) {
