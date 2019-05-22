@@ -12,6 +12,7 @@ import SongDetail from "./components/SongDetail";
 
 // Css
 import "./App.css";
+import ErrorBoundary from "./errors/ErrorBoundary";
 
 // Rompen la barra de navegacion en los primeros 5 o 10 segs de entrar a la app
 // despues vuelve a funcnionar
@@ -20,15 +21,17 @@ import "./App.css";
 //const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
 //const SongDetail = React.lazy(() => import("./components/SongDetail"));
 
+const initialState = {
+  loading: true,
+  albums: [],
+  songs: []
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: true,
-      albums: [],
-      songs: []
-    };
+    this.state = initialState
 
     this.initialContext = {
       name: "",
@@ -57,6 +60,10 @@ class App extends Component {
     }
   }
 
+  onReset() {
+    this.setState(initialState);
+  }
+
   //         <CardsGrid albums={this.state.albums} songs={this.state.songs} />
   //        <CardDetail
   //          albums={this.state.albums.filter(album => album.id === 1)}
@@ -73,47 +80,53 @@ class App extends Component {
     return (
       <React.StrictMode>
         <React.Suspense fallback="Cargando la aplicación">
-          <div className="App">
-            <Router>
-              <UserContext.Provider value={this.initialContext}>
-                <TopBar />
-                <Switch>
-                  <Route
-                    exact
-                    path="/"
-                    render={props => <SongsGrid {...this.state} />}
-                  />
-                  <Route
-                    exact
-                    path="/albums"
-                    render={props => <AlbumsGrid {...this.state} />}
-                  />
-                  <Route
-                    path="/albums/:id"
-                    render={routerProps => (
-                      <AlbumDetail
-                        albums={this.state.albums}
-                        songs={this.state.songs}
-                        {...routerProps}
-                      />
-                    )}
-                  />
-                  <Route
-                    path="/player/:id"
-                    render={routerProps => (
-                      <SongDetail
-                        albums={this.state.albums}
-                        songs={this.state.songs}
-                        {...routerProps}
-                      />
-                    )}
-                  />
-                  <Route path="/login" component={UserLogin} />
-                  <PrivateRoute path="/profile" component={UserProfile} />
-                </Switch>
-              </UserContext.Provider>
-            </Router>
-          </div>
+          <ErrorBoundary
+            onReset={this.onReset}
+            message="Se ha producido un error en la aplicación"
+          >
+            <div className="App">
+              <Router>
+                <UserContext.Provider value={this.initialContext}>
+                  <TopBar />
+                  <Switch>
+                    <Route
+                      exact
+                      path="/"
+                      render={props => <SongsGrid {...this.state} />}
+                    />
+                    <Route
+                      exact
+                      path="/albums"
+                      render={props => <AlbumsGrid {...this.state} />}
+                    />
+                    <Route
+                      path="/albums/:id"
+                      render={routerProps => (
+                        <AlbumDetail
+                          albums={this.state.albums}
+                          songs={this.state.songs}
+                          {...routerProps}
+                        />
+                      )}
+                    />
+                    <Route
+                      path="/player/:id"
+                      render={routerProps => (
+                        <SongDetail
+                          albums={this.state.albums}
+                          songs={this.state.songs}
+                          onReset={this.onReset}
+                          {...routerProps}
+                        />
+                      )}
+                    />
+                    <Route path="/login" component={UserLogin} />
+                    <PrivateRoute path="/profile" component={UserProfile} />
+                  </Switch>
+                </UserContext.Provider>
+              </Router>
+            </div>
+          </ErrorBoundary>
         </React.Suspense>
       </React.StrictMode>
     );

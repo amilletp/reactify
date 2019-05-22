@@ -19,6 +19,7 @@ import SongsTable from "./SongsTable";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import ErrorBoundary from "../errors/ErrorBoundary";
 
 const styles = theme => ({
   root: {
@@ -99,55 +100,64 @@ const SongDetail = props => {
   };
 
   return (
-    <div className={classes.root}>
-      <GridList
-        cols={1}
-        spacing={12}
-        cellHeight={620}
-        className={classes.gridList}
-      >
-        <GridListTile
-          key="Subheader"
+    <ErrorBoundary
+      onReset={props.onReset}
+      message="Se ha producido un error cargando el reproductor"
+    >
+      <div className={classes.root}>
+        <GridList
           cols={1}
-          className={classes.gridListTitle}
+          spacing={12}
+          cellHeight={620}
+          className={classes.gridList}
         >
-          <ListSubheader component="div">Reproductor</ListSubheader>
-        </GridListTile>
-        {songsAlbum.map(tile => (
-          <GridListTile key={tile.id} className={classes.gridListTile}>
-            <Card className={classes.card}>
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
-                  <Typography component="h6" variant="h6">
-                    {tile.name}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {tile.album.artist}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Álbum: <br />
-                    {tile.album.name}
-                  </Typography>
-                </CardContent>
-                <div>
-                  <audio className={classes.audio} onPlay={handlePlay} controls>
-                    <source
-                      src="/music/funky_energy_loop.mp3"
-                      type="audio/mpeg"
-                    />
-                  </audio>
-                </div>
-              </div>
-              <CardMedia
-                className={classes.cover}
-                image={tile.album.cover}
-                title={tile.album.name}
-              />
-            </Card>
+          <GridListTile
+            key="Subheader"
+            cols={1}
+            className={classes.gridListTitle}
+          >
+            <ListSubheader component="div">Reproductor</ListSubheader>
           </GridListTile>
-        ))}
-      </GridList>
-    </div>
+          {songsAlbum.map(tile => (
+            <GridListTile key={tile.id} className={classes.gridListTile}>
+              <Card className={classes.card}>
+                <div className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Typography component="h6" variant="h6">
+                      {tile.name}
+                    </Typography>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {tile.album.artist}
+                    </Typography>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      Álbum: <br />
+                      {tile.album.name}
+                    </Typography>
+                  </CardContent>
+                  <div>
+                    <audio
+                      className={classes.audio}
+                      onPlay={handlePlay}
+                      controls
+                    >
+                      <source
+                        src="/music/funky_energy_loop.mp3"
+                        type="audio/mpeg"
+                      />
+                    </audio>
+                  </div>
+                </div>
+                <CardMedia
+                  className={classes.cover}
+                  image={tile.album.cover}
+                  title={tile.album.name}
+                />
+              </Card>
+            </GridListTile>
+          ))}
+        </GridList>
+      </div>
+    </ErrorBoundary>
   );
 };
 
