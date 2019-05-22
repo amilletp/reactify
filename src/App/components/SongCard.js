@@ -73,8 +73,17 @@ const styles = theme => ({
   }
 });
 
+const findSong = (songs, id) => {
+  const parsedId = parseInt(id, 10);
+  let result = songs.find(song => song.id === parsedId);
+  result = result === undefined ? [] : [result];
+  return result;
+};
+
 const SongCard = props => {
-  const { classes, albums, songs } = props;
+  const { classes, match } = props;
+  let { albums, songs } = props;
+  songs = findSong(songs, match.params.id);
 
   const songsAlbum = songs.reduce((result, song) => {
     song = {

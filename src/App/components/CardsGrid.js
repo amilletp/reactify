@@ -17,6 +17,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   root: {
@@ -34,7 +35,8 @@ const styles = theme => ({
     color: "rgba(255, 255, 255, 0.54)"
   },
   card: {
-    maxWidth: 400
+    maxWidth: 400,
+    textDecoration: "none"
   },
   cardContent: {
     padding: 0
@@ -57,16 +59,13 @@ const styles = theme => ({
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500]
+    backgroundColor: red[500],
+    textDecoration: "none"
   }
 });
 
 const CardsGrid = props => {
   const { classes, albums, songs } = props;
-  const [expanded, setExpanded] = useState(false);
-  const handleExpandClick = () => {
-    setExpanded({ expanded: !expanded });
-  };
 
   return (
     <div className={classes.root}>
@@ -93,6 +92,8 @@ const CardsGrid = props => {
                     <MoreVertIcon />
                   </IconButton>
                 }
+                component={Link}
+                to={`/albums/${tile.id}`}
                 title={tile.name}
                 subheader={tile.artist}
               />

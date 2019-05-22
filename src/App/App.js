@@ -50,12 +50,6 @@ class App extends Component {
     }
   }
 
-  findSong(id) {
-    let result = this.state.songs.find(song => song.id === id);
-    result = result === undefined ? [] : [result];
-    return result;
-  }
-
   //         <CardsGrid albums={this.state.albums} songs={this.state.songs} />
   //        <CardDetail
   //          albums={this.state.albums.filter(album => album.id === 1)}
@@ -81,24 +75,27 @@ class App extends Component {
                 render={props => <SongsGrid {...this.state} />}
               />
               <Route
+                exact
                 path="/albums"
                 render={props => <CardsGrid {...this.state} />}
               />
               <Route
-                path="/album"
-                render={props => (
+                path="/albums/:id"
+                render={routerProps => (
                   <CardDetail
-                    albums={this.state.albums.filter(album => album.id === 1)}
-                    songs={this.state.songs.filter(song => song.album_id === 1)}
+                    albums={this.state.albums}
+                    songs={this.state.songs}
+                    {...routerProps}
                   />
                 )}
               />
               <Route
-                path="/player"
-                render={props => (
+                path="/player/:id"
+                render={routerProps => (
                   <SongCard
                     albums={this.state.albums}
-                    songs={this.findSong(1)}
+                    songs={this.state.songs}
+                    {...routerProps}
                   />
                 )}
               />

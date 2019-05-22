@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { Redirect } from "react-router";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -43,9 +44,15 @@ const parseSeconds = seconds =>
 
 const SongsTable = props => {
   const { classes, songs } = props;
+  const [state, setState] = useState({ pathname: "", redirect: false });
+
+  const handleClick = id => event => {
+    setState({ pathname: "/player/" + id, redirect: true });
+  };
 
   return (
     <Paper className={classes.root}>
+      {state.redirect === true && <Redirect to={state.pathname} />}
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -55,7 +62,11 @@ const SongsTable = props => {
         </TableHead>
         <TableBody>
           {songs.map(row => (
-            <TableRow className={classes.row} key={row.id}>
+            <TableRow
+              onClick={handleClick(row.id)}
+              className={classes.row}
+              key={row.id}
+            >
               <CustomTableCell component="th" scope="row">
                 {row.name}
               </CustomTableCell>

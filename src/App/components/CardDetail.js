@@ -62,11 +62,12 @@ const styles = theme => ({
 });
 
 function CardDetail(props) {
-  const { classes, albums, songs } = props;
-  const [expanded, setExpanded] = useState(false);
-  const handleExpandClick = () => {
-    setExpanded({ expanded: !expanded });
-  };
+  const { classes, match } = props;
+  let { albums, songs } = props;
+
+  const id = parseInt(match.params.id, 10);
+  albums = albums.filter(album => album.id === id);
+  songs = songs.filter(song => song.album_id === id);
 
   return (
     <div className={classes.root}>

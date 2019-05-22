@@ -1,12 +1,16 @@
-.Appn {
+/*.App {
   margin: 3em auto;
   max-width: 50em;
 }
 
-.Appm h1 {
+.App h1 {
   text-align: center;
-}
+}*/
 
 div.App {
   background-color: #f5f5f5;
+}
+a {
+  text-decoration: unset;
+  color: initial;
 }

@@ -19,6 +19,7 @@ import SongsTable from "./SongsTable";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   root: {
@@ -129,9 +130,11 @@ const SongsGrid = props => {
             <Card className={classes.card}>
               <div className={classes.details}>
                 <CardContent className={classes.content}>
-                  <Typography component="h6" variant="h6">
-                    {tile.name}
-                  </Typography>
+                  <Link to={`/player/${tile.id}`}>
+                    <Typography component="h6" variant="h6">
+                      {tile.name}
+                    </Typography>
+                  </Link>
                   <Typography variant="subtitle1" color="textSecondary">
                     {tile.album.artist}
                   </Typography>
