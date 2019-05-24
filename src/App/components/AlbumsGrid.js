@@ -75,7 +75,9 @@ const AlbumsGrid = props => {
         className={classes.gridList}
       >
         <GridListTile key="Subheader" cols={3} style={{ height: "auto" }}>
-          <ListSubheader component="div">Álbums</ListSubheader>
+          <ListSubheader component="div">
+            <h2>Álbums</h2>
+          </ListSubheader>
         </GridListTile>
         {albums.map(tile => (
           <GridListTile key={tile.id}>

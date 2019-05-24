@@ -74,7 +74,7 @@ const UserLogin = props => {
     // errorPwd: login.password === "",
     //  denied: !(login.login === "test" && login.password === "pwd")
     //});
-    //userContext.signedIn = login.login === "test" && login.password === "pwd";
+    userContext.signedIn = login.login === "test" && login.password === "pwd";
   };
 
   //useEffect(() => loginFieldRef.current.firstChild.focus());

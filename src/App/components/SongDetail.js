@@ -131,7 +131,9 @@ const SongDetail = props => {
             cols={1}
             className={classes.gridListTitle}
           >
-            <ListSubheader component="div">Reproductor</ListSubheader>
+            <ListSubheader component="div">
+              <h2>Reproductor</h2>
+            </ListSubheader>
           </GridListTile>
           {songsAlbum.map(tile => (
             <GridListTile key={tile.id} className={classes.gridListTile}>

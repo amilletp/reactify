@@ -15,6 +15,16 @@ a {
   color: initial;
 }
 
+.MuiListSubheader-root,
+.MuiTab-textColorPrimary,
+.MuiTypography-colorTextSecondary {
+  color: black;
+}
+
+.MuiTableRow-root:nth-of-type(odd) {
+  background-color: unset;
+}
+
 audio.floating {
   width: 182%;
 }
