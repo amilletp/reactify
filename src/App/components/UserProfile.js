@@ -4,6 +4,11 @@ import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import UserContext from "../contexts/user";
+import {
+  updateProfileData,
+  initProfileData
+} from "../redux/actions/userActions";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   container: {
@@ -29,23 +34,27 @@ const styles = theme => ({
 });
 
 const UserProfile = props => {
+  // De Material UI
   const { classes } = props;
+
+  // Del Store
+  const { user, initProfile, updateProfile } = props;
+
+  // La informacion del usuario la inicializamos en
+  // desde el UserContext, al no tener back-end y
+  // hacer click en Guardar, persistimos en el mismo
   let userContext = useContext(UserContext);
-  const [user, setUser] = useState({
-    name: userContext.name,
-    surname: userContext.surname,
-    email: userContext.email
-  });
+
+  // Probar inicializar con el useEffect
+  //updateProfile("name", userContext.name);
+  //updateProfile("surname", userContext.name);
+  //updateProfile("email", userContext.name);
+  //initProfile(userContext);
 
   //const nameFieldRef = useRef();
 
   const handleChange = field => event => {
-    let modifiedUser = { ...user };
-    modifiedUser[field] = event.target.value;
-    setUser(modifiedUser);
-    //    this.setState({
-    //      [name]: event.target.value
-    //    });
+    updateProfile(field, event.target.value);
   };
 
   const handleSaveProfile = () => {
@@ -104,4 +113,24 @@ UserProfile.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UserProfile);
+const mapStateToProps = state => {
+  return {
+    user: {
+      name: state.profile.name,
+      surname: state.profile.surname,
+      email: state.profile.email
+    }
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    initProfile: user => dispatch(initProfileData({ ...user })),
+    updateProfile: (field, value) => dispatch(updateProfileData(field, value))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(UserProfile));

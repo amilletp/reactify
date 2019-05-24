@@ -4,22 +4,16 @@ import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import red from "@material-ui/core/colors/red";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SongsTable from "./SongsTable";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
 import ErrorBoundary from "../errors/ErrorBoundary";
+import { Button } from "@material-ui/core";
+import { findSong } from "../utils/utils";
+import { connect } from "react-redux";
+import { navigate } from "../redux/actions/navigationActions";
+import * as Constants from "../constants/constants";
 
 const styles = theme => ({
   root: {
@@ -71,28 +65,49 @@ const styles = theme => ({
   },
   audio: {
     width: "100%"
+  },
+  button: {
+    position: "absolute",
+    top: "62%",
+    left: "19%",
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 223,
+    height: 50
   }
 });
 
-const findSong = (songs, id) => {
-  const parsedId = parseInt(id, 10);
-  let result = songs.find(song => song.id === parsedId);
-  result = result === undefined ? [] : [result];
-  return result;
-};
-
 const SongDetail = props => {
+  // De Material UI y del Router
   const { classes, match } = props;
+
+  // Desde App
   let { albums, songs } = props;
+
+  // Del Store de Redux
+  const { topBarValue, updateValue } = props;
+
+  if (topBarValue !== Constants.PLAYER) {
+    updateValue(Constants.PLAYER);
+  }
+
+  // Este state unicamente es para provocar error en la aplicacion
+  const [state, updateState] = useState([""]);
+
   songs = findSong(songs, match.params.id);
 
-  const songsAlbum = songs.reduce((result, song) => {
+  // Unir canciones con albums en mismo objeto
+  let songsAlbum = songs.reduce((result, song) => {
     song = {
       ...song,
       album: albums.find(album => song.album_id === album.id)
     };
     return [...result, song];
   }, []);
+
+  const handleErrorClick = e => {
+    updateState([]);
+  };
 
   const handlePlay = e => {
     e.target.className = "pepito";
@@ -156,6 +171,14 @@ const SongDetail = props => {
             </GridListTile>
           ))}
         </GridList>
+        <Button
+          onClick={handleErrorClick}
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
+          Error{state[0].toLowerCase()}
+        </Button>
       </div>
     </ErrorBoundary>
   );
@@ -166,4 +189,18 @@ SongDetail.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(SongDetail);
+const mapStateToProps = state => {
+  return {
+    topBarValue: state.navigation.topBarValue
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    updateValue: topBarValue => dispatch(navigate(topBarValue))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(SongDetail));

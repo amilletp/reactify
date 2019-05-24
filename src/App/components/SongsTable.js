@@ -8,10 +8,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Redirect } from "react-router";
+import { parseSeconds } from "../utils/utils";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: "darkblue", //"theme.palette.common.black",
+    backgroundColor: "darkblue",
     color: theme.palette.common.white
   },
   body: {
@@ -38,13 +39,11 @@ const styles = theme => ({
   }
 });
 
-const parseSeconds = seconds =>
-  Number.isInteger(seconds)
-    ? `${Math.floor(seconds / 60)}:${seconds % 60}`
-    : "";
-
 const SongsTable = props => {
   const { classes, songs } = props;
+
+  // Estado propio que no se usara nunca fuera del componente
+  // Por eso no esta en Redux
   const [state, setState] = useState({ pathname: "", redirect: false });
 
   const handleClick = id => event => {
@@ -53,6 +52,8 @@ const SongsTable = props => {
 
   return (
     <Paper className={classes.root}>
+      {/* En el TableBody no se permiten elementos <a> o <Link> 
+        se hace el Redirect de esta forma con el handleClick */}
       {state.redirect === true && <Redirect to={state.pathname} />}
       <Table className={classes.table}>
         <TableHead>

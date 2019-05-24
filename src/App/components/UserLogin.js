@@ -11,6 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Typography } from "@material-ui/core";
 import UserContext from "../contexts/user";
 import { Redirect } from "react-router";
+import {
+  initLoginData,
+  updateLoginData,
+  validateLoginData
+} from "../redux/actions/userActions";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   container: {
@@ -42,36 +48,33 @@ const styles = theme => ({
   }
 });
 
-const UserLogin = ({ classes, location }) => {
-  const [login, setLogin] = useState({
-    login: "",
-    password: "",
-    errorLogin: false,
-    errorPwd: false,
-    denied: false
-  });
+const UserLogin = props => {
+  // De Material UI y Router
+  const { classes, location } = props;
 
+  // De Redux Store
+  const { login, initLogin, updateLogin, validateLogin } = props;
+
+  // Utilizamos el contexto de usuario para
+  // almacenar el valor de signedIn
   let userContext = useContext(UserContext);
 
   //const loginFieldRef = useRef();
 
-  const updateLoginState = (field, value) => {
-    login[field] = value;
-    setLogin({ ...login });
-  };
-
   const handleChange = field => event => {
-    updateLoginState(field, event.target.value);
+    updateLogin(field, event.target.value);
   };
 
   const handleLogin = e => {
-    setLogin({
-      ...login,
-      errorLogin: login.login === "",
-      errorPwd: login.password === "",
-      denied: !(login.login === "test" && login.password === "pwd")
-    });
-    userContext.signedIn = login.login === "test" && login.password === "pwd";
+    validateLogin(login.login, login.password);
+
+    //setLogin({
+    //  ...login,
+    //  errorLogin: login.login === "",
+    // errorPwd: login.password === "",
+    //  denied: !(login.login === "test" && login.password === "pwd")
+    //});
+    //userContext.signedIn = login.login === "test" && login.password === "pwd";
   };
 
   //useEffect(() => loginFieldRef.current.firstChild.focus());
@@ -160,4 +163,28 @@ UserLogin.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UserLogin);
+const mapStateToProps = state => {
+  return {
+    login: {
+      login: state.login.login,
+      password: state.login.password,
+      errorLogin: state.login.errorLogin,
+      errorPwd: state.login.errorPwd,
+      denied: state.login.denied
+    }
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    initLogin: () => dispatch(initLoginData()),
+    updateLogin: (field, value) => dispatch(updateLoginData(field, value)),
+    validateLogin: (login, password) =>
+      dispatch(validateLoginData(login, password))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(UserLogin));

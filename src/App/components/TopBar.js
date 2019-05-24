@@ -5,6 +5,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { connect } from "react-redux";
+import { navigate } from "../redux/actions/navigationActions";
 
 const styles = {
   root: {
@@ -16,43 +18,19 @@ const styles = {
   }
 };
 
-const getInitialValueByPath = () => {
-  let initialValue;
-  let path = window.location.pathname;
-  switch (path) {
-    case "/":
-      initialValue = 0;
-      break;
-    case "/albums":
-      initialValue = 1;
-      break;
-    case "/login":
-      initialValue = 3;
-      break;
-    case "/profile":
-      initialValue = 4;
-      break;
-    default:
-      if (path.match(/\/player\/\d{1,}/)) {
-        initialValue = 2;
-      } else {
-        initialValue = 0;
-      }
-  }
-  return initialValue;
-};
-
 const TopBar = props => {
+  // De Material UI
   const { classes } = props;
-  const [value, setValue] = useState(getInitialValueByPath());
+  // Del Store
+  const { topBarValue, updateValue } = props;
   const handleChange = (event, value) => {
-    setValue(value);
+    updateValue(value);
   };
 
   return (
     <Paper className={classes.root}>
       <Tabs
-        value={value}
+        value={topBarValue}
         onChange={handleChange}
         indicatorColor="primary"
         textColor="primary"
@@ -72,4 +50,18 @@ TopBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(TopBar);
+const mapStateToProps = state => {
+  return {
+    topBarValue: state.navigation.topBarValue
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    updateValue: topBarValue => dispatch(navigate(topBarValue))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(TopBar));

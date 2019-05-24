@@ -20,6 +20,7 @@ import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { Link } from "react-router-dom";
+import { getRecommendedSongs } from "../utils/utils";
 
 const styles = theme => ({
   root: {
@@ -72,13 +73,6 @@ const styles = theme => ({
   }
 });
 
-const getRecommendedSongs = songs => {
-  let maxLength = 6;
-  let length =
-    songs.length >= maxLength ? maxLength : Math.floor(songs.length / 2);
-  return songs.sort(() => Math.random() - 0.5).slice(0, length);
-};
-
 //                <div className={classes.controls}>
 //                  <IconButton aria-label="Previous">
 //                    {theme.direction === "rtl" ? (
@@ -102,6 +96,7 @@ const getRecommendedSongs = songs => {
 const SongsGrid = props => {
   const { classes, albums, songs } = props;
 
+  // Unir canciones con albums en mismo objeto
   const songsAlbum = getRecommendedSongs(songs).reduce((result, song) => {
     song = {
       ...song,

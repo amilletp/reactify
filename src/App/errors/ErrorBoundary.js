@@ -1,4 +1,41 @@
 import React from "react";
+import {
+  GridListTile,
+  ListSubheader,
+  GridList,
+  Typography,
+  Button
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+  root: {
+    marginTop: 40,
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
+    backgroundColor: theme.palette.background.paper,
+    height: 200
+  },
+  gridList: {
+    width: "63%",
+    height: "auto"
+  },
+  gridListTile: {
+    height: "800px!important",
+    width: "100%!important"
+  },
+  button: {
+    position: "absolute",
+    top: "14%",
+    left: "19%",
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 223,
+    height: 50
+  }
+});
 
 /**
  * Componente de tipo ErrorBoundary ya que define los métodos
@@ -8,6 +45,7 @@ import React from "react";
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
+    this.classes = this.props.classes;
 
     this.onClick = this.onClick.bind(this);
 
@@ -50,9 +88,27 @@ class ErrorBoundary extends React.Component {
     // Si ha habido un error, mostramos el mensaje y un botón para reiniciar el estado
     if (this.state.error === true) {
       return (
-        <div>
-          <h1>{this.props.message}</h1>
-          <button onClick={this.onClick}>Reintentar</button>
+        <div className={this.classes.root}>
+          <GridList
+            cols={1}
+            spacing={12}
+            cellHeight={620}
+            className={this.classes.gridList}
+          >
+            <GridListTile key="Subheader" cols={3}>
+              <Typography component="h6" variant="h6">
+                {this.props.message}
+              </Typography>
+            </GridListTile>
+          </GridList>
+          <Button
+            onClick={this.onClick}
+            variant="contained"
+            color="primary"
+            className={this.classes.button}
+          >
+            Restablecer
+          </Button>
         </div>
       );
     }
@@ -62,4 +118,4 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export default ErrorBoundary;
+export default withStyles(styles, { withTheme: true })(ErrorBoundary);
