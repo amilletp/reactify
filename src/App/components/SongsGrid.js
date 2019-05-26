@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -20,7 +20,14 @@ import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { Link } from "react-router-dom";
-import { getRecommendedSongs } from "../utils/utils";
+import {
+  getRecommendedSongs,
+  fetchMapStateToProps,
+  fetchMapDispatchToProps,
+  fetchResourcesAndSaveToStore,
+  getSongsAlbum
+} from "../utils/utils";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   root: {
@@ -94,16 +101,18 @@ const styles = theme => ({
 //                </div>
 
 const SongsGrid = props => {
-  const { classes, albums, songs } = props;
+  // De Material UI y Router
+  const { classes } = props;
+
+  // De Redux Store
+  const { albums, songs, getAlbums, getSongs } = props;
+
+  useEffect(() =>
+    fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
+  );
 
   // Unir canciones con albums en mismo objeto
-  const songsAlbum = getRecommendedSongs(songs).reduce((result, song) => {
-    song = {
-      ...song,
-      album: albums.find(album => song.album_id === album.id)
-    };
-    return [...result, song];
-  }, []);
+  const songsAlbum = getSongsAlbum(getRecommendedSongs(songs.items), albums);
 
   return (
     <div className={classes.root}>
@@ -122,39 +131,40 @@ const SongsGrid = props => {
             <h2>Temas recomendados</h2>
           </ListSubheader>
         </GridListTile>
-        {songsAlbum.map(tile => (
-          <GridListTile key={tile.id} className={classes.gridListTile}>
-            <Card className={classes.card}>
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
-                  <Link to={`/player/${tile.id}`}>
-                    <Typography component="h6" variant="h6">
-                      {tile.name}
+        {songsAlbum.length > 0 &&
+          songsAlbum.map(tile => (
+            <GridListTile key={tile.id} className={classes.gridListTile}>
+              <Card className={classes.card}>
+                <div className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Link to={`/player/${tile.id}`}>
+                      <Typography component="h6" variant="h6">
+                        {tile.name}
+                      </Typography>
+                    </Link>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {tile.album.artist}
                     </Typography>
-                  </Link>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {tile.album.artist}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Álbum: <br />
-                    {tile.album.name}
-                  </Typography>
-                </CardContent>
-                <audio className={classes.audio} controls>
-                  <source
-                    src="/music/funky_energy_loop.mp3"
-                    type="audio/mpeg"
-                  />
-                </audio>
-              </div>
-              <CardMedia
-                className={classes.cover}
-                image={tile.album.cover}
-                title={tile.album.name}
-              />
-            </Card>
-          </GridListTile>
-        ))}
+                    <Typography variant="subtitle1" color="textSecondary">
+                      Álbum: <br />
+                      {tile.album.name}
+                    </Typography>
+                  </CardContent>
+                  <audio className={classes.audio} controls>
+                    <source
+                      src="/music/funky_energy_loop.mp3"
+                      type="audio/mpeg"
+                    />
+                  </audio>
+                </div>
+                <CardMedia
+                  className={classes.cover}
+                  image={tile.album.cover}
+                  title={tile.album.name}
+                />
+              </Card>
+            </GridListTile>
+          ))}
       </GridList>
     </div>
   );
@@ -165,4 +175,7 @@ SongsGrid.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(SongsGrid);
+export default connect(
+  fetchMapStateToProps,
+  fetchMapDispatchToProps
+)(withStyles(styles, { withTheme: true })(SongsGrid));

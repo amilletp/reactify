@@ -18,11 +18,7 @@ a {
 .MuiListSubheader-root,
 .MuiTab-textColorPrimary,
 .MuiTypography-colorTextSecondary {
-  color: black;
-}
-
-.MuiTableRow-root:nth-of-type(odd) {
-  background-color: unset;
+  color: black !important;
 }
 
 audio.floating {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -16,6 +16,15 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
+import {
+  fetchResourcesAndSaveToStore,
+  fetchMapStateToProps,
+  fetchMapDispatchToProps
+} from "../utils/utils";
+import { connect } from "react-redux";
+import * as Constants from "../constants/constants";
+import { navigate } from "../redux/actions/navigationActions";
+import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 
 const styles = theme => ({
   root: {
@@ -61,12 +70,34 @@ const styles = theme => ({
 });
 
 function AlbumDetail(props) {
+  // De Material UI y Router
   const { classes, match } = props;
-  let { albums, songs } = props;
+
+  // De Redux Store
+  const {
+    topBarValue,
+    updateValue,
+    albums,
+    songs,
+    getAlbums,
+    getSongs
+  } = props;
+
+  if (topBarValue !== Constants.ALBUMS) {
+    updateValue(Constants.ALBUMS);
+  }
+
+  useEffect(() =>
+    fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
+  );
 
   const id = parseInt(match.params.id, 10);
-  albums = albums.filter(album => album.id === id);
-  songs = songs.filter(song => song.album_id === id);
+
+  let foundAlbums = [];
+
+  if (albums.items) {
+    foundAlbums = albums.items.filter(album => album.id === id);
+  }
 
   return (
     <div className={classes.root}>
@@ -79,44 +110,47 @@ function AlbumDetail(props) {
         <GridListTile key="Subheader" cols={1} style={{ height: "auto" }}>
           <ListSubheader component="div">Álbum</ListSubheader>
         </GridListTile>
-        {albums.map(tile => (
-          <GridListTile key={tile.id}>
-            <Card className={classes.card}>
-              <CardHeader
-                avatar={
-                  <Avatar aria-label="Album" className={classes.avatar}>
-                    A
-                  </Avatar>
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                title={tile.name}
-                subheader={tile.artist}
-              />
-              <CardMedia
-                className={classes.media}
-                image={tile.cover}
-                title={tile.name}
-              />
-              <CardContent className={classes.cardContent}>
-                <SongsTable
-                  songs={songs.filter(song => song.album_id === tile.id)}
+        {foundAlbums.length > 0 &&
+          foundAlbums.map(tile => (
+            <GridListTile key={tile.id}>
+              <Card className={classes.card}>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="Album" className={classes.avatar}>
+                      A
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={tile.name}
+                  subheader={tile.artist}
                 />
-              </CardContent>
-              <CardActions className={classes.actions}>
-                <IconButton aria-label="Add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="Share">
-                  <ShareIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </GridListTile>
-        ))}
+                <CardMedia
+                  className={classes.media}
+                  image={tile.cover}
+                  title={tile.name}
+                />
+                <CardContent className={classes.cardContent}>
+                  <SongsTable
+                    songs={songs.items.filter(
+                      song => song.album_id === tile.id
+                    )}
+                  />
+                </CardContent>
+                <CardActions className={classes.actions}>
+                  <IconButton aria-label="Add to favorites">
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton aria-label="Share">
+                    <ShareIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </GridListTile>
+          ))}
       </GridList>
     </div>
   );
@@ -126,4 +160,21 @@ AlbumDetail.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AlbumDetail);
+const mapStateToProps = state => {
+  return {
+    ...state,
+    topBarValue: state.navigation.topBarValue
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    updateValue: topBarValue => dispatch(navigate(topBarValue)),
+    getAlbums: () => dispatch(fetchAlbums()),
+    getSongs: () => dispatch(fetchSongs())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(AlbumDetail));

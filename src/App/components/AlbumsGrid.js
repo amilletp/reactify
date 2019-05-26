@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -17,6 +17,12 @@ import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
 import { Link } from "react-router-dom";
+import {
+  fetchMapStateToProps,
+  fetchMapDispatchToProps,
+  fetchResourcesAndSaveToStore
+} from "../utils/utils";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   root: {
@@ -64,7 +70,15 @@ const styles = theme => ({
 });
 
 const AlbumsGrid = props => {
-  const { classes, albums, songs } = props;
+  // De Material UI y Router
+  const { classes } = props;
+
+  // De Redux Store
+  const { albums, songs, getAlbums, getSongs } = props;
+
+  useEffect(() =>
+    fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
+  );
 
   return (
     <div className={classes.root}>
@@ -79,46 +93,49 @@ const AlbumsGrid = props => {
             <h2>Álbums</h2>
           </ListSubheader>
         </GridListTile>
-        {albums.map(tile => (
-          <GridListTile key={tile.id}>
-            <Card className={classes.card}>
-              <CardHeader
-                avatar={
-                  <Avatar aria-label="Album" className={classes.avatar}>
-                    {tile.name.charAt(0)}
-                  </Avatar>
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                component={Link}
-                to={`/albums/${tile.id}`}
-                title={tile.name}
-                subheader={tile.artist}
-              />
-              <CardMedia
-                className={classes.media}
-                image={tile.cover}
-                title={tile.name}
-              />
-              <CardContent className={classes.cardContent}>
-                <SongsTable
-                  songs={songs.filter(song => song.album_id === tile.id)}
+        {albums.items.length > 0 &&
+          albums.items.map(tile => (
+            <GridListTile key={tile.id}>
+              <Card className={classes.card}>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="Album" className={classes.avatar}>
+                      {tile.name.charAt(0)}
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  component={Link}
+                  to={`/albums/${tile.id}`}
+                  title={tile.name}
+                  subheader={tile.artist}
                 />
-              </CardContent>
-              <CardActions className={classes.actions}>
-                <IconButton aria-label="Add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="Share">
-                  <ShareIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </GridListTile>
-        ))}
+                <CardMedia
+                  className={classes.media}
+                  image={tile.cover}
+                  title={tile.name}
+                />
+                <CardContent className={classes.cardContent}>
+                  <SongsTable
+                    songs={songs.items.filter(
+                      song => song.album_id === tile.id
+                    )}
+                  />
+                </CardContent>
+                <CardActions className={classes.actions}>
+                  <IconButton aria-label="Add to favorites">
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton aria-label="Share">
+                    <ShareIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </GridListTile>
+          ))}
       </GridList>
     </div>
   );
@@ -128,4 +145,7 @@ AlbumsGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AlbumsGrid);
+export default connect(
+  fetchMapStateToProps,
+  fetchMapDispatchToProps
+)(withStyles(styles)(AlbumsGrid));

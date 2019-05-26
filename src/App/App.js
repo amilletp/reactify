@@ -23,17 +23,9 @@ import store from "./redux/store";
 //const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
 //const SongDetail = React.lazy(() => import("./components/SongDetail"));
 
-const initialState = {
-  loading: true,
-  albums: [],
-  songs: []
-};
-
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.state = initialState;
 
     this.initialContext = {
       name: "",
@@ -43,24 +35,24 @@ class App extends Component {
     };
   }
 
-  async componentDidMount() {
-    try {
-      let res = await fetch("albums.json");
-      //const res = await fetch('/albums');
-      const albums = await res.json();
-      res = await fetch("songs.json");
-      //const res = await fetch('/songs');
-      const songs = await res.json();
-      this.setState(prevState => ({
-        ...prevState,
-        loading: false,
-        albums,
-        songs
-      }));
-    } catch (err) {
-      console.error("Error accediendo al servidor", err);
-    }
-  }
+  //  async componentDidMount() {
+  //    try {
+  //      let res = await fetch("albums.json");
+  //      //const res = await fetch('/albums');
+  //      const albums = await res.json();
+  //      res = await fetch("songs.json");
+  //const res = await fetch('/songs');
+  //      const songs = await res.json();
+  //      this.setState(prevState => ({
+  //        ...prevState,
+  //        loading: false,
+  //        albums,
+  //        songs
+  //      }));
+  //    } catch (err) {
+  //      console.error("Error accediendo al servidor", err);
+  //    }
+  //  }
 
   onReset() {
     window.location.href = "/";
@@ -95,32 +87,21 @@ class App extends Component {
                       <Route
                         exact
                         path="/"
-                        render={props => <SongsGrid {...this.state} />}
+                        render={routerProps => <SongsGrid />}
                       />
                       <Route
                         exact
                         path="/albums"
-                        render={props => <AlbumsGrid {...this.state} />}
+                        render={routerProps => <AlbumsGrid />}
                       />
                       <Route
                         path="/albums/:id"
-                        render={routerProps => (
-                          <AlbumDetail
-                            albums={this.state.albums}
-                            songs={this.state.songs}
-                            {...routerProps}
-                          />
-                        )}
+                        render={routerProps => <AlbumDetail {...routerProps} />}
                       />
                       <Route
                         path="/player/:id"
                         render={routerProps => (
-                          <SongDetail
-                            albums={this.state.albums}
-                            songs={this.state.songs}
-                            onReset={this.onReset}
-                            {...routerProps}
-                          />
+                          <SongDetail onReset={this.onReset} {...routerProps} />
                         )}
                       />
                       <Route path="/login" component={UserLogin} />

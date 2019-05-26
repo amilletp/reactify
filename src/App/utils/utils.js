@@ -1,4 +1,5 @@
 import * as Constants from "../constants/constants";
+import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 
 export const findSong = (songs, id) => {
   const parsedId = parseInt(id, 10);
@@ -38,6 +39,66 @@ export const getInitialValueByPath = () => {
       }
   }
   return initialValue;
+};
+
+export const getSongsAlbum = (songs, albums) =>
+  songs.reduce((result, song) => {
+    song = {
+      ...song,
+      album: albums.items.find(album => song.album_id === album.id)
+    };
+    return [...result, song];
+  }, []);
+
+/**
+ * Funcion comun para ejecutar las acciones Fetch
+ * de Albums y Canciones y guardarlas en el store
+ */
+export const fetchResourcesAndSaveToStore = (
+  albums,
+  songs,
+  getAlbums,
+  getSongs
+) => {
+  // Comprobamos que no se esta haciendo ya la carga
+  // o que haya finalizado
+  if (
+    !albums.isLoading &&
+    !albums.error &&
+    albums.items &&
+    albums.items.length === 0
+  ) {
+    getAlbums();
+  }
+  if (
+    !songs.isLoading &&
+    !songs.error &&
+    songs.items &&
+    songs.items.length === 0
+  ) {
+    getSongs();
+  }
+};
+
+/**
+ * Funciones comunes para conectar componentes con
+ * las acciones Fetch de Albums y Canciones
+ */
+export const fetchMapStateToProps = state => {
+  return {
+    ...state
+  };
+};
+
+/**
+ * Funciones comunes para conectar componentes con
+ * las acciones Fetch de Albums y Canciones
+ */
+export const fetchMapDispatchToProps = dispatch => {
+  return {
+    getAlbums: () => dispatch(fetchAlbums()),
+    getSongs: () => dispatch(fetchSongs())
+  };
 };
 
 export const parseSeconds = seconds =>

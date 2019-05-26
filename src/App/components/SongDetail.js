@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -10,10 +10,16 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import ErrorBoundary from "../errors/ErrorBoundary";
 import { Button } from "@material-ui/core";
-import { findSong } from "../utils/utils";
+import {
+  findSong,
+  getSongsAlbum,
+  fetchResourcesAndSaveToStore
+} from "../utils/utils";
 import { connect } from "react-redux";
 import { navigate } from "../redux/actions/navigationActions";
 import * as Constants from "../constants/constants";
+import {} from "../utils/utils";
+import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 
 const styles = theme => ({
   root: {
@@ -81,29 +87,35 @@ const SongDetail = props => {
   // De Material UI y del Router
   const { classes, match } = props;
 
-  // Desde App
-  let { albums, songs } = props;
-
   // Del Store de Redux
-  const { topBarValue, updateValue } = props;
+  const {
+    topBarValue,
+    updateValue,
+    albums,
+    songs,
+    getAlbums,
+    getSongs
+  } = props;
 
   if (topBarValue !== Constants.PLAYER) {
     updateValue(Constants.PLAYER);
   }
 
+  useEffect(() =>
+    fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
+  );
+
   // Este state unicamente es para provocar error en la aplicacion
   const [state, updateState] = useState([""]);
 
-  songs = findSong(songs, match.params.id);
+  let songsAlbum = [];
 
-  // Unir canciones con albums en mismo objeto
-  let songsAlbum = songs.reduce((result, song) => {
-    song = {
-      ...song,
-      album: albums.find(album => song.album_id === album.id)
-    };
-    return [...result, song];
-  }, []);
+  if (songs.items) {
+    const foundSong = findSong(songs.items, match.params.id);
+
+    // Unir canciones con albums en mismo objeto
+    songsAlbum = getSongsAlbum(foundSong, albums);
+  }
 
   const handleErrorClick = e => {
     updateState([]);
@@ -135,43 +147,44 @@ const SongDetail = props => {
               <h2>Reproductor</h2>
             </ListSubheader>
           </GridListTile>
-          {songsAlbum.map(tile => (
-            <GridListTile key={tile.id} className={classes.gridListTile}>
-              <Card className={classes.card}>
-                <div className={classes.details}>
-                  <CardContent className={classes.content}>
-                    <Typography component="h6" variant="h6">
-                      {tile.name}
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      {tile.album.artist}
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      Álbum: <br />
-                      {tile.album.name}
-                    </Typography>
-                  </CardContent>
-                  <div>
-                    <audio
-                      className={classes.audio}
-                      onPlay={handlePlay}
-                      controls
-                    >
-                      <source
-                        src="/music/funky_energy_loop.mp3"
-                        type="audio/mpeg"
-                      />
-                    </audio>
+          {songsAlbum.length > 0 &&
+            songsAlbum.map(tile => (
+              <GridListTile key={tile.id} className={classes.gridListTile}>
+                <Card className={classes.card}>
+                  <div className={classes.details}>
+                    <CardContent className={classes.content}>
+                      <Typography component="h6" variant="h6">
+                        {tile.name}
+                      </Typography>
+                      <Typography variant="subtitle1" color="textSecondary">
+                        {tile.album.artist}
+                      </Typography>
+                      <Typography variant="subtitle1" color="textSecondary">
+                        Álbum: <br />
+                        {tile.album.name}
+                      </Typography>
+                    </CardContent>
+                    <div>
+                      <audio
+                        className={classes.audio}
+                        onPlay={handlePlay}
+                        controls
+                      >
+                        <source
+                          src="/music/funky_energy_loop.mp3"
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </div>
                   </div>
-                </div>
-                <CardMedia
-                  className={classes.cover}
-                  image={tile.album.cover}
-                  title={tile.album.name}
-                />
-              </Card>
-            </GridListTile>
-          ))}
+                  <CardMedia
+                    className={classes.cover}
+                    image={tile.album.cover}
+                    title={tile.album.name}
+                  />
+                </Card>
+              </GridListTile>
+            ))}
         </GridList>
         <Button
           onClick={handleErrorClick}
@@ -193,12 +206,15 @@ SongDetail.propTypes = {
 
 const mapStateToProps = state => {
   return {
+    ...state,
     topBarValue: state.navigation.topBarValue
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    updateValue: topBarValue => dispatch(navigate(topBarValue))
+    updateValue: topBarValue => dispatch(navigate(topBarValue)),
+    getAlbums: () => dispatch(fetchAlbums()),
+    getSongs: () => dispatch(fetchSongs())
   };
 };
 
