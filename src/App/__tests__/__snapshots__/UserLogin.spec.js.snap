@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserLogin Render should match the snapshot 1`] = `
+<form
+  autocomplete="off"
+  class="UserLogin-container-1"
+  novalidate=""
+>
+  <div>
+    <div
+      class="MuiFormControl-root MuiFormControl-marginNormal MuiTextField-root UserLogin-textField-2"
+    >
+      <label
+        class="MuiFormLabel-root Mui-required Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
+        data-shrink="false"
+        for="outlined-login"
+      >
+        Login
+        <span
+          class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
+        >
+           *
+        </span>
+      </label>
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
+      >
+        <fieldset
+          aria-hidden="true"
+          class="PrivateNotchedOutline-root-60 MuiOutlinedInput-notchedOutline"
+          style="padding-left:8px"
+        >
+          <legend
+            class="PrivateNotchedOutline-legend-61"
+            style="width:0.01px"
+          >
+            <span>
+              ​
+            </span>
+          </legend>
+        </fieldset>
+        <input
+          aria-invalid="false"
+          class="MuiInputBase-input MuiOutlinedInput-input"
+          id="outlined-login"
+          required=""
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="MuiFormControl-root MuiFormControl-marginNormal MuiTextField-root UserLogin-textField-2"
+    >
+      <label
+        class="MuiFormLabel-root Mui-required Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
+        data-shrink="false"
+        for="outlined-password-input"
+      >
+        Password
+        <span
+          class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
+        >
+           *
+        </span>
+      </label>
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
+      >
+        <fieldset
+          aria-hidden="true"
+          class="PrivateNotchedOutline-root-60 MuiOutlinedInput-notchedOutline"
+          style="padding-left:8px"
+        >
+          <legend
+            class="PrivateNotchedOutline-legend-61"
+            style="width:0.01px"
+          >
+            <span>
+              ​
+            </span>
+          </legend>
+        </fieldset>
+        <input
+          aria-invalid="false"
+          autocomplete="current-password"
+          class="MuiInputBase-input MuiOutlinedInput-input"
+          id="outlined-password-input"
+          required=""
+          type="password"
+          value=""
+        />
+      </div>
+    </div>
+     
+  </div>
+  <div
+    class="UserLogin-buttonContainer-4"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root UserLogin-button-3 MuiButton-containedPrimary MuiButton-contained"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="MuiButton-label"
+      >
+        Acceder
+      </span>
+    </button>
+  </div>
+</form>
+`;

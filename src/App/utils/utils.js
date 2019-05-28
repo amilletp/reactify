@@ -8,6 +8,12 @@ export const findSong = (songs, id) => {
   return result;
 };
 
+/**
+ * Obtiene una subcoleccion de canciones aleatorias
+ * con un tamaño maximo de 6
+ *
+ * @param {*} songs
+ */
 export const getRecommendedSongs = songs => {
   let maxLength = 6;
   let length =

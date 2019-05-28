@@ -1,10 +1,12 @@
 import { fetchAlbums } from "../actions/fetchActions";
+
 // Estado inicial
 const initialState = {
   isLoading: false,
   items: [],
   error: false
 };
+
 // Implementamos el reducer
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {

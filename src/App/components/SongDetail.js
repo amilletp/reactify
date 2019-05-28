@@ -122,7 +122,7 @@ const SongDetail = props => {
   };
 
   const handlePlay = e => {
-    e.target.className = "pepito";
+    e.target.className = "floating";
     console.log(e.target);
   };
 

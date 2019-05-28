@@ -53,7 +53,7 @@ const UserLogin = props => {
   // almacenar el valor de signedIn
   let userContext = useContext(UserContext);
 
-  //const loginFieldRef = useRef();
+  const loginFieldRef = useRef();
 
   const handleChange = field => event => {
     updateLogin(field, event.target.value);
@@ -61,17 +61,14 @@ const UserLogin = props => {
 
   const handleLogin = e => {
     validateLogin(login.login, login.password);
-
-    //setLogin({
-    //  ...login,
-    //  errorLogin: login.login === "",
-    // errorPwd: login.password === "",
-    //  denied: !(login.login === "test" && login.password === "pwd")
-    //});
     userContext.signedIn = login.login === "test" && login.password === "pwd";
   };
 
-  //useEffect(() => loginFieldRef.current.firstChild.focus());
+  useEffect(() => {
+    if (login.login.length === 0 && login.password.length === 0) {
+      loginFieldRef.current.firstChild.focus();
+    }
+  });
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -112,7 +109,7 @@ const UserLogin = props => {
               onChange={handleChange("login")}
               margin="normal"
               variant="outlined"
-              //ref={loginFieldRef}
+              ref={loginFieldRef}
             />
             <TextField
               required

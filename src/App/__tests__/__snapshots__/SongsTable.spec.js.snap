@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SongsTable Render should match the snapshot 1`] = `
+<div
+  class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded SongsTable-root-1"
+>
+  <table
+    class="MuiTable-root SongsTable-table-2"
+  >
+    <thead
+      class="MuiTableHead-root"
+    >
+      <tr
+        class="MuiTableRow-root MuiTableRow-head"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-head WithStyles(ForwardRef(TableCell))-head-38"
+          scope="col"
+        >
+          Nombre
+        </th>
+        <th
+          class="MuiTableCell-root MuiTableCell-head WithStyles(ForwardRef(TableCell))-head-38 MuiTableCell-alignRight"
+          scope="col"
+        >
+          Duración
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      class="MuiTableBody-root"
+    >
+      <tr
+        class="MuiTableRow-root SongsTable-row-3"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39"
+          scope="row"
+        >
+          Dancing Queen
+        </th>
+        <td
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39 MuiTableCell-alignRight"
+        >
+          3:23
+        </td>
+      </tr>
+      <tr
+        class="MuiTableRow-root SongsTable-row-3"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39"
+          scope="row"
+        >
+          Fernando
+        </th>
+        <td
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39 MuiTableCell-alignRight"
+        >
+          3:23
+        </td>
+      </tr>
+      <tr
+        class="MuiTableRow-root SongsTable-row-3"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39"
+          scope="row"
+        >
+          Gimme! Gimme! Gimme! (A Man After Midnight)
+        </th>
+        <td
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39 MuiTableCell-alignRight"
+        >
+          3:23
+        </td>
+      </tr>
+      <tr
+        class="MuiTableRow-root SongsTable-row-3"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39"
+          scope="row"
+        >
+          Does Your Mother Know
+        </th>
+        <td
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39 MuiTableCell-alignRight"
+        >
+          3:23
+        </td>
+      </tr>
+      <tr
+        class="MuiTableRow-root SongsTable-row-3"
+      >
+        <th
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39"
+          scope="row"
+        >
+          The Name Of The Game
+        </th>
+        <td
+          class="MuiTableCell-root MuiTableCell-body WithStyles(ForwardRef(TableCell))-body-39 MuiTableCell-alignRight"
+        >
+          3:23
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;
