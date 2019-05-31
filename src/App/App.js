@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import TopBar from "./components/TopBar";
 import UserProfile from "./components/UserProfile";
@@ -10,11 +10,13 @@ import AlbumsGrid from "./components/AlbumsGrid";
 import AlbumDetail from "./components/AlbumDetail";
 import SongDetail from "./components/SongDetail";
 import ErrorBoundary from "./errors/ErrorBoundary";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import FloatingPlayer from "./components/FloatingPlayer";
+import * as Constants from "./constants/constants";
 
 // Css
 import "./App.css";
-import { Provider } from "react-redux";
-import store from "./redux/store";
 
 // Rompen la barra de navegacion en los primeros 5 o 10 segs de entrar a la app
 // despues vuelve a funcnionar
@@ -23,99 +25,89 @@ import store from "./redux/store";
 //const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
 //const SongDetail = React.lazy(() => import("./components/SongDetail"));
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = props => {
+  const initialContext = {
+    name: "",
+    surname: "",
+    email: "",
+    signedIn: false
+  };
 
-    this.initialContext = {
-      name: "",
-      surname: "",
-      email: "",
-      signedIn: false
-    };
-  }
+  const onReset = () => (window.location.href = "/");
 
-  //  async componentDidMount() {
-  //    try {
-  //      let res = await fetch("albums.json");
-  //      //const res = await fetch('/albums');
-  //      const albums = await res.json();
-  //      res = await fetch("songs.json");
-  //const res = await fetch('/songs');
-  //      const songs = await res.json();
-  //      this.setState(prevState => ({
-  //        ...prevState,
-  //        loading: false,
-  //        albums,
-  //        songs
-  //      }));
-  //    } catch (err) {
-  //      console.error("Error accediendo al servidor", err);
-  //    }
-  //  }
-
-  onReset() {
-    window.location.href = "/";
-  }
-
-  //         <CardsGrid albums={this.state.albums} songs={this.state.songs} />
-  //        <CardDetail
-  //          albums={this.state.albums.filter(album => album.id === 1)}
-  //          songs={this.state.songs.filter(song => song.album_id === 1)}
-  //        />
-  //        <SongsGrid albums={this.state.albums} songs={this.state.songs} />
-  //        <SongCard
-  //          albums={this.state.albums}
-  //          songs={this.findSong(1)}
-  //        />
-
-  // https://codepen.io/asommer70/pen/JGdGge
-  render() {
-    return (
-      <React.StrictMode>
-        <React.Suspense fallback="Cargando la aplicación">
-          <ErrorBoundary
-            onReset={this.onReset}
-            message="Se ha producido un error en la aplicación"
-          >
-            <Provider store={store}>
-              <div className="App">
-                <Router>
-                  <UserContext.Provider value={this.initialContext}>
-                    <TopBar />
-                    <Switch>
-                      <Route
-                        exact
-                        path="/"
-                        render={routerProps => <SongsGrid />}
-                      />
-                      <Route
-                        exact
-                        path="/albums"
-                        render={routerProps => <AlbumsGrid />}
-                      />
-                      <Route
-                        path="/albums/:id"
-                        render={routerProps => <AlbumDetail {...routerProps} />}
-                      />
-                      <Route
-                        path="/player/:id"
-                        render={routerProps => (
-                          <SongDetail onReset={this.onReset} {...routerProps} />
-                        )}
-                      />
-                      <Route path="/login" component={UserLogin} />
-                      <PrivateRoute path="/profile" component={UserProfile} />
-                    </Switch>
-                  </UserContext.Provider>
-                </Router>
-              </div>
-            </Provider>
-          </ErrorBoundary>
-        </React.Suspense>
-      </React.StrictMode>
-    );
-  }
-}
+  return (
+    <React.StrictMode>
+      <React.Suspense fallback="Cargando la aplicación">
+        <ErrorBoundary
+          onReset={onReset}
+          message="Se ha producido un error en la aplicación"
+        >
+          <Provider store={store}>
+            <div className="App">
+              <Router>
+                <UserContext.Provider value={initialContext}>
+                  <TopBar />
+                  <Switch>
+                    <Route
+                      exact
+                      path="/"
+                      render={routerProps => (
+                        <SongsGrid
+                          sectionId={Constants.START}
+                          sectionTitle="Temas recomendados"
+                          {...routerProps}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/recent"
+                      render={routerProps => (
+                        <SongsGrid
+                          sectionId={Constants.RECENT}
+                          sectionTitle="Canciones recientes"
+                          {...routerProps}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/search"
+                      render={routerProps => (
+                        <SongsGrid
+                          sectionId={Constants.SEARCH}
+                          sectionTitle="Búsqueda"
+                          {...routerProps}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/albums"
+                      render={routerProps => <AlbumsGrid />}
+                    />
+                    <Route
+                      path="/albums/:id"
+                      render={routerProps => <AlbumDetail {...routerProps} />}
+                    />
+                    <Route
+                      path="/player/:id"
+                      render={routerProps => (
+                        <SongDetail onReset={onReset} {...routerProps} />
+                      )}
+                    />
+                    <Route path="/login" component={UserLogin} />
+                    <PrivateRoute path="/profile" component={UserProfile} />
+                  </Switch>
+                </UserContext.Provider>
+              </Router>
+              <FloatingPlayer />
+            </div>
+          </Provider>
+        </ErrorBoundary>
+      </React.Suspense>
+    </React.StrictMode>
+  );
+};
 
 export default App;

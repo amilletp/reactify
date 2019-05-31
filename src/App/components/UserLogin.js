@@ -47,7 +47,7 @@ const UserLogin = props => {
   const { classes, location } = props;
 
   // De Redux Store
-  const { login, initLogin, updateLogin, validateLogin } = props;
+  const { login, updateLogin, validateLogin } = props;
 
   // Utilizamos el contexto de usuario para
   // almacenar el valor de signedIn

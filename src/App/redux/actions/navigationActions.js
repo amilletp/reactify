@@ -1,4 +1,5 @@
 import actionTypes from "./actionTypes";
+import * as Constants from "../../constants/constants";
 
 export const navigate = topBarValue => ({
   type: actionTypes.NAVIGATE,
@@ -7,12 +8,22 @@ export const navigate = topBarValue => ({
 
 export const navigateStart = () => ({
   type: actionTypes.NAVIGATE_START,
-  topBarValue: 0
+  topBarValue: Constants.START
+});
+
+export const navigateRecent = () => ({
+  type: actionTypes.NAVIGATE_RECENT,
+  topBarValue: Constants.RECENT
+});
+
+export const navigateSearch = () => ({
+  type: actionTypes.NAVIGATE_RECENT,
+  topBarValue: Constants.SEARCH
 });
 
 export const navigateAlbums = () => ({
   type: actionTypes.NAVIGATE_ALBUMS,
-  topBarValue: 1
+  topBarValue: Constants.ALBUMS
 });
 
 export const navigateAlbum = () => ({
@@ -22,15 +33,15 @@ export const navigateAlbum = () => ({
 
 export const navigatePlayer = () => ({
   type: actionTypes.NAVIGATE_PLAYER,
-  topBarValue: 2
+  topBarValue: Constants.PLAYER
 });
 
 export const navigateLogin = () => ({
   type: actionTypes.NAVIGATE_LOGIN,
-  topBarValue: 3
+  topBarValue: Constants.LOGIN
 });
 
 export const navigateProfile = () => ({
   type: actionTypes.NAVIGATE_PROFILE,
-  topBarValue: 4
+  topBarValue: Constants.PROFILE
 });

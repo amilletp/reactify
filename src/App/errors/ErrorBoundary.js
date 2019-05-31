@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  GridListTile,
-  ListSubheader,
-  GridList,
-  Typography,
-  Button
-} from "@material-ui/core";
+import { GridListTile, GridList, Typography, Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({

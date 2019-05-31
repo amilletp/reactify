@@ -20,6 +20,7 @@ import { navigate } from "../redux/actions/navigationActions";
 import * as Constants from "../constants/constants";
 import {} from "../utils/utils";
 import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
+import { initFloatPlayer } from "../redux/actions/floatPlayerActions";
 
 const styles = theme => ({
   root: {
@@ -34,11 +35,10 @@ const styles = theme => ({
     height: "auto"
   },
   gridListTitle: {
-    //marginTop: 57,
     height: "auto!important"
   },
   gridListTile: {
-    height: "800px!important",
+    height: "83vh!important",
     width: "100%!important"
   },
   icon: {
@@ -61,9 +61,7 @@ const styles = theme => ({
   },
   controls: {
     display: "flex",
-    alignItems: "center" //,
-    //    paddingLeft: theme.spacing.unit,
-    //    paddingBottom: theme.spacing.unit
+    alignItems: "center"
   },
   playIcon: {
     height: 38,
@@ -94,7 +92,9 @@ const SongDetail = props => {
     albums,
     songs,
     getAlbums,
-    getSongs
+    getSongs,
+    floatPlayer,
+    handleFloatPlayer
   } = props;
 
   if (topBarValue !== Constants.PLAYER) {
@@ -117,13 +117,14 @@ const SongDetail = props => {
     songsAlbum = getSongsAlbum(foundSong, albums);
   }
 
+  if (songsAlbum.length > 0) {
+    let status =
+      floatPlayer.status === "hidden" ? "visible" : floatPlayer.status;
+    handleFloatPlayer(floatPlayer.song, songsAlbum[0], status);
+  }
+
   const handleErrorClick = e => {
     updateState([]);
-  };
-
-  const handlePlay = e => {
-    e.target.className = "floating";
-    console.log(e.target);
   };
 
   return (
@@ -164,18 +165,6 @@ const SongDetail = props => {
                         {tile.album.name}
                       </Typography>
                     </CardContent>
-                    <div>
-                      <audio
-                        className={classes.audio}
-                        onPlay={handlePlay}
-                        controls
-                      >
-                        <source
-                          src="/music/funky_energy_loop.mp3"
-                          type="audio/mpeg"
-                        />
-                      </audio>
-                    </div>
                   </div>
                   <CardMedia
                     className={classes.cover}
@@ -214,7 +203,9 @@ const mapDispatchToProps = dispatch => {
   return {
     updateValue: topBarValue => dispatch(navigate(topBarValue)),
     getAlbums: () => dispatch(fetchAlbums()),
-    getSongs: () => dispatch(fetchSongs())
+    getSongs: () => dispatch(fetchSongs()),
+    handleFloatPlayer: (prevSong, song, status) =>
+      dispatch(initFloatPlayer(prevSong, song, status))
   };
 };
 

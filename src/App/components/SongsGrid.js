@@ -1,33 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import red from "@material-ui/core/colors/red";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SongsTable from "./SongsTable";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { Link } from "react-router-dom";
 import {
   getRecommendedSongs,
-  fetchMapStateToProps,
-  fetchMapDispatchToProps,
+  mapStateToProps,
   fetchResourcesAndSaveToStore,
-  getSongsAlbum
+  getSongsAlbum,
+  getRecentSongs
 } from "../utils/utils";
 import { connect } from "react-redux";
+import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
+import * as Constants from "../constants/constants";
+import { TextField } from "@material-ui/core";
+import { search } from "../redux/actions/userActions";
 
 const styles = theme => ({
   root: {
@@ -67,9 +60,7 @@ const styles = theme => ({
   },
   controls: {
     display: "flex",
-    alignItems: "center" //,
-    //paddingLeft: theme.spacing.unit,
-    //paddingBottom: theme.spacing.unit
+    alignItems: "center"
   },
   playIcon: {
     height: 38,
@@ -77,42 +68,96 @@ const styles = theme => ({
   },
   audio: {
     width: "100%"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   }
 });
 
-//                <div className={classes.controls}>
-//                  <IconButton aria-label="Previous">
-//                    {theme.direction === "rtl" ? (
-//                      <SkipNextIcon />
-//                    ) : (
-//                      <SkipPreviousIcon />
-//                    )}
-//                  </IconButton>
-//                  <IconButton aria-label="Play/pause">
-//                    <PlayArrowIcon className={classes.playIcon} />
-//                  </IconButton>
-//                  <IconButton aria-label="Next">
-//                    {theme.direction === "rtl" ? (
-//                      <SkipPreviousIcon />
-//                    ) : (
-//                      <SkipNextIcon />
-//                    )}
-//                  </IconButton>
-//                </div>
-
 const SongsGrid = props => {
   // De Material UI y Router
-  const { classes } = props;
+  const { classes, sectionId, sectionTitle } = props;
 
   // De Redux Store
-  const { albums, songs, getAlbums, getSongs } = props;
+  const { albums, songs, getAlbums, getSongs, search, updateSearch } = props;
+
+  let songsToRender;
+
+  switch (sectionId) {
+    case Constants.START:
+      songsToRender = getRecommendedSongs(songs.items);
+      break;
+    case Constants.RECENT:
+      songsToRender = getRecentSongs(songs);
+      break;
+    case Constants.SEARCH:
+    default:
+      songsToRender = songs.items;
+      break;
+  }
+
+  const handleChange = field => event => {
+    updateSearch(field, event.target.value);
+  };
 
   useEffect(() =>
     fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
   );
 
+  const matchesTerms = (stringToSearch, searchTerms) => {
+    stringToSearch = stringToSearch.toLowerCase();
+    searchTerms = "" + searchTerms;
+    searchTerms = searchTerms.toLowerCase();
+    const searchTermsArray = searchTerms.split(" ");
+
+    let match = false;
+    for (let term of searchTermsArray) {
+      // Se descartan cadenas de 2 o 1 caracter
+      if (term.length > 2) {
+        if (!stringToSearch.includes(term)) {
+          // Debe contener todos los terminos
+          // Si alguno no cumple, no hace match
+          return false;
+        }
+
+        // Si la cadena es mayor de 2 caracteres la contiene
+        // hacemos match
+        match = true;
+      }
+    }
+
+    return match;
+  };
+
   // Unir canciones con albums en mismo objeto
-  const songsAlbum = getSongsAlbum(getRecommendedSongs(songs.items), albums);
+  let songsAlbum = getSongsAlbum(songsToRender, albums);
+
+  if (sectionId === Constants.SEARCH) {
+    const songsFilteredByName = songsAlbum.filter(({ name }) =>
+      matchesTerms(name, search.song)
+    );
+    const songsFilteredByAlbum = songsAlbum.filter(({ album }) =>
+      matchesTerms(album.name, search.album)
+    );
+    const songsFilteredByArtist = songsAlbum.filter(({ album }) =>
+      matchesTerms(album.artist, search.artist)
+    );
+
+    const totalFiltered = [
+      ...songsFilteredByName,
+      ...songsFilteredByAlbum,
+      ...songsFilteredByArtist
+    ];
+    const totalFilteredIds = totalFiltered.map(({ id }) => id);
+    const matchingUniqueIds = totalFilteredIds.reduce(
+      (acc, id) =>
+        acc !== null && acc.includes(id) ? acc.concat() : acc.concat(id),
+      []
+    );
+
+    songsAlbum = songsAlbum.filter(({ id }) => matchingUniqueIds.includes(id));
+  }
 
   return (
     <div className={classes.root}>
@@ -128,8 +173,39 @@ const SongsGrid = props => {
           className={classes.gridListTitle}
         >
           <ListSubheader component="div">
-            <h2>Temas recomendados</h2>
+            <h2>{sectionTitle}</h2>
           </ListSubheader>
+          {sectionId === Constants.SEARCH && (
+            <Fragment>
+              <TextField
+                id="outlined-song"
+                label="Canción"
+                className={classes.textField}
+                value={search.song}
+                onChange={handleChange("song")}
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-album"
+                label="Album"
+                className={classes.textField}
+                value={search.album}
+                onChange={handleChange("album")}
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-artist"
+                label="Artista"
+                className={classes.textField}
+                value={search.artist}
+                onChange={handleChange("artist")}
+                margin="normal"
+                variant="outlined"
+              />
+            </Fragment>
+          )}
         </GridListTile>
         {songsAlbum.length > 0 &&
           songsAlbum.map(tile => (
@@ -151,10 +227,7 @@ const SongsGrid = props => {
                     </Typography>
                   </CardContent>
                   <audio className={classes.audio} controls>
-                    <source
-                      src="/music/funky_energy_loop.mp3"
-                      type="audio/mpeg"
-                    />
+                    <source src={tile.audio} type="audio/mpeg" />
                   </audio>
                 </div>
                 <CardMedia
@@ -175,7 +248,15 @@ SongsGrid.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    getAlbums: () => dispatch(fetchAlbums()),
+    getSongs: () => dispatch(fetchSongs()),
+    updateSearch: (field, value) => dispatch(search(field, value))
+  };
+};
+
 export default connect(
-  fetchMapStateToProps,
-  fetchMapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(withStyles(styles, { withTheme: true })(SongsGrid));

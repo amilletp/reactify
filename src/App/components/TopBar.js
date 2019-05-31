@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -37,8 +37,10 @@ const TopBar = props => {
         centered
       >
         <Tab label="Inicio" component={Link} to="/" />
+        <Tab label="Recientes" component={Link} to="/recent" />
+        <Tab label="Buscar" component={Link} to="/search" />
         <Tab label="Álbums" component={Link} to="/albums" />
-        <Tab label="Reproductor" component={Link} to="/player/1" />
+        <Tab label="Reproductor" component={Link} to="player/1" />
         <Tab label="Inicio de sesión" component={Link} to="/login" />
         <Tab label="Perfil de usuario" component={Link} to="/profile" />
       </Tabs>

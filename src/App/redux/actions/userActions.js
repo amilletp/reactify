@@ -39,12 +39,26 @@ export const initProfileData = ({ name, surname, email }) => ({
 });
 
 export const updateProfileData = (field, value) => {
-  console.log("updateLoginData Field", value);
   let result = {
     type: actionTypes.UPDATE_PROFILE_DATA,
     profile: {}
   };
   result.profile[field] = value;
-  console.log("updateLoginData Result", result);
+
   return result;
 };
+
+export const search = (field, value) => {
+  let result = {
+    type: actionTypes.SEARCH,
+    search: {}
+  };
+  result.search[field] = value;
+
+  return result;
+};
+
+export const addFavoriteAlbum = items => ({
+  type: actionTypes.FAVORITE_ALBUM,
+  items
+});

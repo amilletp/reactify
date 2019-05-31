@@ -11,50 +11,41 @@ import store from "../redux/store";
 /**
  * UserLogin
  */
-describe('UserLogin', () => {
-
+describe("UserLogin", () => {
   describe("Render", () => {
-      const wrapper = render(<Provider store={store}>
-        <UserLogin location={ { state: { redirected: false } }}/>
-        </Provider>
-      );
+    const wrapper = render(
+      <Provider store={store}>
+        <UserLogin location={{ state: { redirected: false } }} />
+      </Provider>
+    );
 
-
-      it('should match the following texts', () => {
+    it("should match the following texts", () => {
       // Comprobamos el texto
-      expect(wrapper.find('label[for="outlined-login"]').text()).toBe("Loginâ*");
-      expect(wrapper.find('label[for="outlined-password-input"]').text()).toBe("Passwordâ*");
-
-  
+      expect(wrapper.find('label[for="outlined-login"]').text()).toBe(
+        "Login *"
+      );
+      expect(wrapper.find('label[for="outlined-password-input"]').text()).toBe(
+        "Password *"
+      );
     });
 
-    it('should match the snapshot', () => {
-      expect(wrapper).toMatchSnapshot(); 
-  });        
+    it("should match the snapshot", () => {
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 
   describe("Mount", () => {
-    const wrapper = mount(<Provider store={store}>
-      <UserLogin location={ { state: { redirected: false } }}/>
+    const wrapper = mount(
+      <Provider store={store}>
+        <UserLogin location={{ state: { redirected: false } }} />
       </Provider>
     );
 
     it("should change class on empty fields", () => {
-      const button = wrapper.find('button')
+      const button = wrapper.find("button");
 
-      button.simulate('click')
-      expect(wrapper.find('div.Mui-error').length).toBe(2);
-
-      });
-});  
-
-
-
-
-
-
+      button.simulate("click");
+      expect(wrapper.find("div.Mui-error").length).toBe(2);
+    });
   });
-
- 
-
-
+});

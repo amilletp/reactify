@@ -1,4 +1,5 @@
 import { fetchAlbums } from "../actions/fetchActions";
+import actionTypes from "../actions/actionTypes";
 
 // Estado inicial
 const initialState = {
@@ -34,6 +35,11 @@ const albumsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: true
+      };
+    case actionTypes.FAVORITE_ALBUM:
+      return {
+        ...state,
+        items: action.items
       };
     default:
       return state;

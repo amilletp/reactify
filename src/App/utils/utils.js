@@ -28,6 +28,12 @@ export const getInitialValueByPath = () => {
     case "/":
       initialValue = Constants.START;
       break;
+    case "/recent":
+      initialValue = Constants.RECENT;
+      break;
+    case "/search":
+      initialValue = Constants.SEARCH;
+      break;
     case "/albums":
       initialValue = Constants.ALBUMS;
       break;
@@ -55,6 +61,37 @@ export const getSongsAlbum = (songs, albums) =>
     };
     return [...result, song];
   }, []);
+
+export const addRecentSong = id => {
+  id = id.toString();
+  let recentSongs = [localStorage.getItem("recentSongs")];
+
+  if (!recentSongs || !recentSongs[0]) {
+    localStorage.setItem("recentSongs", [id]);
+  } else {
+    recentSongs = recentSongs[0].split(",");
+
+    if (!recentSongs.includes(id)) {
+      if (recentSongs.length === 5) {
+        recentSongs.shift();
+      }
+      recentSongs.push(id);
+      localStorage.setItem("recentSongs", recentSongs);
+    }
+  }
+};
+
+export const getRecentSongs = songs => {
+  let recentSongs = [localStorage.getItem("recentSongs")];
+
+  if (recentSongs !== null && recentSongs[0] !== null) {
+    recentSongs = recentSongs[0].split(",");
+
+    return songs.items.filter(({ id }) => recentSongs.includes(id.toString()));
+  }
+
+  return [];
+};
 
 /**
  * Funcion comun para ejecutar las acciones Fetch
@@ -86,11 +123,18 @@ export const fetchResourcesAndSaveToStore = (
   }
 };
 
+export const resourcesAreLoaded = (albums, songs) =>
+  albums &&
+  albums.items &&
+  albums.items.length > 0 &&
+  songs &&
+  songs.items &&
+  songs.items.length > 0;
+
 /**
- * Funciones comunes para conectar componentes con
- * las acciones Fetch de Albums y Canciones
+ * Funcion comun para sacar a props el state de redux
  */
-export const fetchMapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
     ...state
   };

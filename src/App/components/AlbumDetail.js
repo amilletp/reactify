@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -16,15 +16,12 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
-import {
-  fetchResourcesAndSaveToStore,
-  fetchMapStateToProps,
-  fetchMapDispatchToProps
-} from "../utils/utils";
+import { fetchResourcesAndSaveToStore } from "../utils/utils";
 import { connect } from "react-redux";
 import * as Constants from "../constants/constants";
 import { navigate } from "../redux/actions/navigationActions";
 import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
+import { Redirect } from "react-router";
 
 const styles = theme => ({
   root: {
@@ -71,7 +68,7 @@ const styles = theme => ({
 
 function AlbumDetail(props) {
   // De Material UI y Router
-  const { classes, match } = props;
+  const { classes, match, location } = props;
 
   // De Redux Store
   const {
@@ -101,6 +98,9 @@ function AlbumDetail(props) {
 
   return (
     <div className={classes.root}>
+      {location.pathname.includes("/albums/player/") && (
+        <Redirect to={location.pathname.substring(7)} />
+      )}
       <GridList
         cols={1}
         spacing={12}

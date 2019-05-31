@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -38,20 +38,13 @@ const UserProfile = props => {
   const { classes } = props;
 
   // Del Store
-  const { user, initProfile, updateProfile } = props;
+  const { user, updateProfile } = props;
 
   // La informacion del usuario la inicializamos en
-  // desde el UserContext, al no tener back-end y
-  // hacer click en Guardar, persistimos en el mismo
+  // desde el UserContext, al no tener back-end
   let userContext = useContext(UserContext);
 
-  // Probar inicializar con el useEffect
-  //updateProfile("name", userContext.name);
-  //updateProfile("surname", userContext.name);
-  //updateProfile("email", userContext.name);
-  //initProfile(userContext);
-
-  //const nameFieldRef = useRef();
+  const nameFieldRef = useRef();
 
   const handleChange = field => event => {
     updateProfile(field, event.target.value);
@@ -63,7 +56,15 @@ const UserProfile = props => {
     userContext.email = user.email;
   };
 
-  //useEffect(() => nameFieldRef.current.firstChild.focus());
+  useEffect(() => {
+    if (
+      user.name.length === 0 &&
+      user.surname.length === 0 &&
+      user.email.length === 0
+    ) {
+      nameFieldRef.current.firstChild.focus();
+    }
+  });
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -75,7 +76,7 @@ const UserProfile = props => {
         onChange={handleChange("name")}
         margin="normal"
         variant="outlined"
-        //ref={nameFieldRef}
+        ref={nameFieldRef}
       />
       <TextField
         id="outlined-surname"
@@ -119,7 +120,8 @@ const mapStateToProps = state => {
       name: state.profile.name,
       surname: state.profile.surname,
       email: state.profile.email
-    }
+    },
+    floatPlayer: state.floatPlayer
   };
 };
 

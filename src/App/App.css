@@ -21,6 +21,20 @@ a {
   color: black !important;
 }
 
-audio.floating {
-  width: 182%;
+audio.FloatingPlayer-root.hidden {
+  display: none;
+}
+
+audio.FloatingPlayer-root.visible {
+  width: 33vw;
+  position: fixed;
+  top: 49vh;
+  left: 19vw;
+}
+
+audio.FloatingPlayer-root.expanded {
+  position: fixed;
+  bottom: 0vh;
+  padding-left: 1vh;
+  width: 98vw;
 }

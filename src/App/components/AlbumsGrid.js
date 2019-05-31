@@ -17,12 +17,13 @@ import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SongsTable from "./SongsTable";
 import { Link } from "react-router-dom";
-import {
-  fetchMapStateToProps,
-  fetchMapDispatchToProps,
-  fetchResourcesAndSaveToStore
-} from "../utils/utils";
+import { mapStateToProps, fetchResourcesAndSaveToStore } from "../utils/utils";
 import { connect } from "react-redux";
+import { initFloatPlayer } from "../redux/actions/floatPlayerActions";
+import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
+import { addFavoriteAlbum } from "../redux/actions/userActions";
+import Modal from "../../Modal";
+import { Typography } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -66,6 +67,9 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500],
     textDecoration: "none"
+  },
+  favorited: {
+    color: red[500]
   }
 });
 
@@ -74,7 +78,34 @@ const AlbumsGrid = props => {
   const { classes } = props;
 
   // De Redux Store
-  const { albums, songs, getAlbums, getSongs } = props;
+  const {
+    albums,
+    songs,
+    getAlbums,
+    getSongs,
+    floatPlayer,
+    handleFloatPlayer,
+    handleFavoriteAlbum
+  } = props;
+
+  handleFloatPlayer(floatPlayer.prevSong, floatPlayer.song, floatPlayer.status);
+
+  const handleFavorite = id => event => {
+    const favoriteAlbum = albums.items.find(album => id === album.id);
+    if (favoriteAlbum.favorited) {
+      favoriteAlbum.favorited = false;
+    } else {
+      favoriteAlbum.favorited = true;
+    }
+
+    handleFavoriteAlbum(albums.items);
+  };
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const onClose = () => setOpenModal(false);
+
+  const showModal = () => setOpenModal(true);
 
   useEffect(() =>
     fetchResourcesAndSaveToStore(albums, songs, getAlbums, getSongs)
@@ -126,16 +157,29 @@ const AlbumsGrid = props => {
                   />
                 </CardContent>
                 <CardActions className={classes.actions}>
-                  <IconButton aria-label="Add to favorites">
-                    <FavoriteIcon />
+                  <IconButton
+                    aria-label="Add to favorites"
+                    onClick={handleFavorite(tile.id)}
+                  >
+                    <FavoriteIcon
+                      className={tile.favorited ? classes.favorited : null}
+                    />
                   </IconButton>
-                  <IconButton aria-label="Share">
+                  <IconButton aria-label="Share" onClick={showModal}>
                     <ShareIcon />
                   </IconButton>
                 </CardActions>
               </Card>
             </GridListTile>
           ))}
+        <Modal open={openModal} onClose={onClose}>
+          <Typography component="h6" variant="h6">
+            Disponible pronto...
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            (y también los estilos de este modal.... :/)
+          </Typography>
+        </Modal>
       </GridList>
     </div>
   );
@@ -145,7 +189,17 @@ AlbumsGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    getAlbums: () => dispatch(fetchAlbums()),
+    getSongs: () => dispatch(fetchSongs()),
+    handleFloatPlayer: (prevSong, song, status) =>
+      dispatch(initFloatPlayer(prevSong, song, status)),
+    handleFavoriteAlbum: items => dispatch(addFavoriteAlbum(items))
+  };
+};
+
 export default connect(
-  fetchMapStateToProps,
-  fetchMapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(withStyles(styles)(AlbumsGrid));
