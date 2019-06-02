@@ -2,7 +2,7 @@ import { createAsyncAction } from "redux-promise-middleware-actions";
 
 export const fetchAlbums = createAsyncAction("ALBUMS", async () => {
   try {
-    const res = await fetch("http://localhost:3000/albums");
+    const res = await fetch("/api/albums");
     return await res.json();
   } catch (err) {
     console.error(err);
@@ -11,7 +11,7 @@ export const fetchAlbums = createAsyncAction("ALBUMS", async () => {
 
 export const fetchSongs = createAsyncAction("SONGS", async () => {
   try {
-    const res = await fetch("http://localhost:3000/songs");
+    const res = await fetch("/api/songs");
     return await res.json();
   } catch (err) {
     console.error(err);

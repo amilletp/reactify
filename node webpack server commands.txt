@@ -1,0 +1,11 @@
+Compile webpack
+npx webpack --mode=development
+
+json-server
+node J:\dev\repo\react-redux\practica-final\node_modules\json-server\lib\cli\bin.js --watch server/data.json --static server/static --port 3001
+
+webpack-dev-server
+node J:\dev\repo\react-redux\practica-final\node_modules\webpack-dev-server\bin\webpack-dev-server.js --open --mode=development
+
+webpack analyze
+npx webpack --mode=production --profile --json > stats.json

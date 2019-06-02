@@ -20,7 +20,7 @@ const albumsReducer = (state = initialState, action) => {
         error: false
       };
     case String(fetchAlbums.fulfilled):
-      // Almacenamos los articulos y reiniciamos
+      // Almacenamos los items y reiniciamos
       // las flags
       return {
         ...state,

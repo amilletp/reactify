@@ -18,8 +18,8 @@ import * as Constants from "./constants/constants";
 // Css
 import "./App.css";
 
-// Rompen la barra de navegacion en los primeros 5 o 10 segs de entrar a la app
-// despues vuelve a funcnionar
+// El lazy loading no funciona bien, la barra de navegacion superior necesita
+// comunicarse con el componente antes de que este se haya cargado
 //const SongsGrid = React.lazy(() => import("./components/SongsGrid"));
 //const AlbumsGrid = React.lazy(() => import("./components/AlbumsGrid"));
 //const AlbumDetail = React.lazy(() => import("./components/AlbumDetail"));
@@ -35,78 +35,81 @@ const App = props => {
 
   const onReset = () => (window.location.href = "/");
 
+  // La barra superior de Tabs de MaterialUI hace uso de un metodo
+  // deprecado en el StrictMode. Lo deshabilitamos para quitar el
+  // warning
+  //<React.StrictMode>
+
   return (
-    <React.StrictMode>
-      <React.Suspense fallback="Cargando la aplicación">
-        <ErrorBoundary
-          onReset={onReset}
-          message="Se ha producido un error en la aplicación"
-        >
-          <Provider store={store}>
-            <div className="App">
-              <Router>
-                <UserContext.Provider value={initialContext}>
-                  <TopBar />
-                  <Switch>
-                    <Route
-                      exact
-                      path="/"
-                      render={routerProps => (
-                        <SongsGrid
-                          sectionId={Constants.START}
-                          sectionTitle="Temas recomendados"
-                          {...routerProps}
-                        />
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/recent"
-                      render={routerProps => (
-                        <SongsGrid
-                          sectionId={Constants.RECENT}
-                          sectionTitle="Canciones recientes"
-                          {...routerProps}
-                        />
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/search"
-                      render={routerProps => (
-                        <SongsGrid
-                          sectionId={Constants.SEARCH}
-                          sectionTitle="Búsqueda"
-                          {...routerProps}
-                        />
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/albums"
-                      render={routerProps => <AlbumsGrid />}
-                    />
-                    <Route
-                      path="/albums/:id"
-                      render={routerProps => <AlbumDetail {...routerProps} />}
-                    />
-                    <Route
-                      path="/player/:id"
-                      render={routerProps => (
-                        <SongDetail onReset={onReset} {...routerProps} />
-                      )}
-                    />
-                    <Route path="/login" component={UserLogin} />
-                    <PrivateRoute path="/profile" component={UserProfile} />
-                  </Switch>
-                </UserContext.Provider>
-              </Router>
-              <FloatingPlayer />
-            </div>
-          </Provider>
-        </ErrorBoundary>
-      </React.Suspense>
-    </React.StrictMode>
+    <React.Suspense fallback="Cargando la aplicación">
+      <ErrorBoundary
+        onReset={onReset}
+        message="Se ha producido un error en la aplicación"
+      >
+        <Provider store={store}>
+          <div className="App">
+            <Router>
+              <UserContext.Provider value={initialContext}>
+                <TopBar />
+                <Switch>
+                  <Route
+                    exact
+                    path="/"
+                    render={routerProps => (
+                      <SongsGrid
+                        sectionId={Constants.START}
+                        sectionTitle="Temas recomendados"
+                        {...routerProps}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/recent"
+                    render={routerProps => (
+                      <SongsGrid
+                        sectionId={Constants.RECENT}
+                        sectionTitle="Canciones recientes"
+                        {...routerProps}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/search"
+                    render={routerProps => (
+                      <SongsGrid
+                        sectionId={Constants.SEARCH}
+                        sectionTitle="Búsqueda"
+                        {...routerProps}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/albums"
+                    render={routerProps => <AlbumsGrid />}
+                  />
+                  <Route
+                    path="/albums/:id"
+                    render={routerProps => <AlbumDetail {...routerProps} />}
+                  />
+                  <Route
+                    path="/player/:id"
+                    render={routerProps => (
+                      <SongDetail onReset={onReset} {...routerProps} />
+                    )}
+                  />
+                  <Route path="/login" component={UserLogin} />
+                  <PrivateRoute path="/profile" component={UserProfile} />
+                </Switch>
+              </UserContext.Provider>
+            </Router>
+            <FloatingPlayer />
+          </div>
+        </Provider>
+      </ErrorBoundary>
+    </React.Suspense>
   );
 };
 
