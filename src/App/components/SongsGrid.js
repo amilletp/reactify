@@ -21,6 +21,7 @@ import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 import * as Constants from "../constants/constants";
 import { TextField } from "@material-ui/core";
 import { search } from "../redux/actions/userActions";
+import Spinner from "./CircularIndeterminate";
 
 const styles = theme => ({
   root: {
@@ -161,6 +162,8 @@ const SongsGrid = props => {
 
   return (
     <div className={classes.root}>
+      {((albums !== null && albums.isLoading) ||
+        (songs && songs.isLoading)) && <Spinner />}
       <GridList
         cols={2}
         spacing={12}

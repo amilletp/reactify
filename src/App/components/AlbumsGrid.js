@@ -24,6 +24,7 @@ import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 import { addFavoriteAlbum } from "../redux/actions/userActions";
 import Modal from "../../Modal";
 import { Typography } from "@material-ui/core";
+import Spinner from "./CircularIndeterminate";
 
 const styles = theme => ({
   root: {
@@ -113,6 +114,8 @@ const AlbumsGrid = props => {
 
   return (
     <div className={classes.root}>
+      {((albums !== null && albums.isLoading) ||
+        (songs && songs.isLoading)) && <Spinner />}
       <GridList
         cols={3}
         spacing={12}

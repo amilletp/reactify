@@ -69,7 +69,7 @@ const App = props => {
                     render={routerProps => (
                       <SongsGrid
                         sectionId={Constants.RECENT}
-                        sectionTitle="Canciones recientes"
+                        sectionTitle="Temas recientes"
                         {...routerProps}
                       />
                     )}

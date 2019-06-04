@@ -40,7 +40,7 @@ const TopBar = props => {
         <Tab label="Recientes" component={Link} to="/recent" />
         <Tab label="Buscar" component={Link} to="/search" />
         <Tab label="Álbums" component={Link} to="/albums" />
-        <Tab label="Reproductor" component={Link} to="player/1" />
+        <Tab label="Reproductor" component={Link} to="/player/1" />
         <Tab label="Inicio de sesión" component={Link} to="/login" />
         <Tab label="Perfil de usuario" component={Link} to="/profile" />
       </Tabs>

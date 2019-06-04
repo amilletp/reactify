@@ -1,16 +1,19 @@
-// LibrerÃ­as
+// Librerias
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
 
 // Cuando no hay configuracion de source-maps se puede
 // exportar directamente el JSON
 //module.exports = {
 const config = {
   entry: {
-    main: "./src/index.js", // Punto de entrada a la aplicaciÃ³n
-    // Contiene ReactDOM.render(...
-    vendor: ["react", "react-dom", "react-router-dom"]
+    // Punto de entrada a la aplicacion. Contiene ReactDOM.render(...
+    main: "./src/index.js",
+    vendor: ["react", "react-dom", "react-router-dom"],
+    // Definicion ServiceWorker
+    sw: "./src/sw.js"
   },
   optimization: {
     // Genera un comentario automatico en los
@@ -25,14 +28,14 @@ const config = {
     // eliminaran
     // Esta activa por defecto si no se especifica
     sideEffects: true,
-    // Importamos todos los mÃ³dulos desde un Ãºnico runtime
+    // Importamos todos los modulos desde un unico runtime
     runtimeChunk: "single",
     // Configuramos splitChunks
     splitChunks: {
       // Configuramos los grupos de chunks
       cacheGroups: {
-        // Definimos un grupo vendor que contendrÃ¡ las
-        // librerÃ­as
+        // Definimos un grupo vendor que contendra las
+        // librerias
         vendor: {
           // Apuntamos al entrypoint "vendor"
           test: "vendor",
@@ -42,17 +45,17 @@ const config = {
           // de este grupo siempre
           enforce: true,
           // Selecciona todos los tipos de chunks,
-          // sÃ­ncronos y asÃ­ncronos
+          // sincronos y asi­ncronos
           chunks: "all"
         }
       }
     }
   },
   output: {
-    // Para gestionar mejor la cachÃ© de los ficheros en servidor,
+    // Para gestionar mejor la cache de los ficheros en servidor,
     // puedes agregar un hash al final de cada fichero de salida.
-    // El objetivo de esta optimizaciÃ³n es agregar un hash por cada
-    // chunk que solo cambie cuando se haya modificado el cÃ³digo de este
+    // El objetivo de esta optimizacion es agregar un hash por cada
+    // chunk que solo cambie cuando se haya modificado el codigo de este
     path: path.resolve(__dirname, "build"), // Carpeta salida de la build
     filename: "[name].[chunkhash:8].js"
   },
@@ -66,7 +69,7 @@ const config = {
       },
       {
         test: /\.css$/, // Extensiones a procesar
-        use: ["style-loader", "css-loader"] // Cuando son mÃ¡s de un loader
+        use: ["style-loader", "css-loader"] // Cuando son mas de un loader
       }, // se ponen con use
       {
         test: /\.(png|jpe?g|gif|mp3)$/,
@@ -83,7 +86,8 @@ const config = {
       template: "./public/index.html", // Fichero origen para index.html
       filename: "./index.html" // Fichero salida
     }),
-    new CopyPlugin([{ from: "public", to: "" }])
+    new CopyPlugin([{ from: "public", to: "" }]),
+    new WorkboxPlugin.InjectManifest({ swSrc: "./src/sw.js" })
   ],
   // Configuraciones para el plugin webpack-dev-server
   // instalado separadamente
@@ -92,7 +96,7 @@ const config = {
     contentBase: "./build",
     // Fuerza a que se sirva index.html en caso de una ruta 404
     historyApiFallback: true,
-    // Todas las peticiones a /api* serÃ¡n redireccionadas a
+    // Todas las peticiones a /api* seran redireccionadas a
     // localhost:3000
     proxy: {
       "/api/albums": "http://localhost:3001/albums",

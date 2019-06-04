@@ -21,6 +21,7 @@ import * as Constants from "../constants/constants";
 import {} from "../utils/utils";
 import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
 import { initFloatPlayer } from "../redux/actions/floatPlayerActions";
+import Spinner from "./CircularIndeterminate";
 
 const styles = theme => ({
   root: {
@@ -133,6 +134,8 @@ const SongDetail = props => {
       message="Se ha producido un error cargando el reproductor"
     >
       <div className={classes.root}>
+        {((albums !== null && albums.isLoading) ||
+          (songs && songs.isLoading)) && <Spinner />}
         <GridList
           cols={1}
           spacing={12}

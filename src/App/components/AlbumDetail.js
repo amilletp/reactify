@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import * as Constants from "../constants/constants";
 import { navigate } from "../redux/actions/navigationActions";
 import { fetchAlbums, fetchSongs } from "../redux/actions/fetchActions";
-import { Redirect } from "react-router";
+import Spinner from "./CircularIndeterminate";
 
 const styles = theme => ({
   root: {
@@ -98,9 +98,8 @@ function AlbumDetail(props) {
 
   return (
     <div className={classes.root}>
-      {location.pathname.includes("/albums/player/") && (
-        <Redirect to={location.pathname.substring(7)} />
-      )}
+      {((albums !== null && albums.isLoading) ||
+        (songs && songs.isLoading)) && <Spinner />}
       <GridList
         cols={1}
         spacing={12}
