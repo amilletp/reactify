@@ -79,17 +79,7 @@ const AlbumsGrid = props => {
   const { classes } = props;
 
   // De Redux Store
-  const {
-    albums,
-    songs,
-    getAlbums,
-    getSongs,
-    floatPlayer,
-    handleFloatPlayer,
-    handleFavoriteAlbum
-  } = props;
-
-  handleFloatPlayer(floatPlayer.prevSong, floatPlayer.song, floatPlayer.status);
+  const { albums, songs, getAlbums, getSongs, handleFavoriteAlbum } = props;
 
   const handleFavorite = id => event => {
     const favoriteAlbum = albums.items.find(album => id === album.id);

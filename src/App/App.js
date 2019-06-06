@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import TopBar from "./components/TopBar";
 import UserProfile from "./components/UserProfile";
@@ -14,6 +14,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import FloatingPlayer from "./components/FloatingPlayer";
 import * as Constants from "./constants/constants";
+import { createUpdateDOMNode } from "./utils/utils";
 
 // Css
 import "./App.css";
@@ -34,6 +35,10 @@ const App = props => {
   };
 
   const onReset = () => (window.location.href = "/");
+
+  useEffect(() => {
+    createUpdateDOMNode();
+  });
 
   // La barra superior de Tabs de MaterialUI hace uso de un metodo
   // deprecado en el StrictMode. Lo deshabilitamos para quitar el

@@ -68,7 +68,7 @@ const styles = theme => ({
 
 function AlbumDetail(props) {
   // De Material UI y Router
-  const { classes, match, location } = props;
+  const { classes, match } = props;
 
   // De Redux Store
   const {

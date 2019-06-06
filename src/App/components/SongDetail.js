@@ -121,7 +121,12 @@ const SongDetail = props => {
   if (songsAlbum.length > 0) {
     let status =
       floatPlayer.status === "hidden" ? "visible" : floatPlayer.status;
-    handleFloatPlayer(floatPlayer.song, songsAlbum[0], status);
+    if (
+      status !== floatPlayer.status ||
+      (floatPlayer.song && floatPlayer.song.id !== songsAlbum[0].id)
+    ) {
+      handleFloatPlayer(floatPlayer.song, songsAlbum[0], status);
+    }
   }
 
   const handleErrorClick = e => {

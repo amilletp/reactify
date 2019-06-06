@@ -93,6 +93,16 @@ export const getRecentSongs = songs => {
   return [];
 };
 
+export const createUpdateDOMNode = () => {
+  let div = document.createElement("div");
+  div.id = "updateApplication";
+  div.innerHTML =
+    'Hay una nueva versión de esta aplicación<button id="reload">Recargar</button></div>';
+
+  let modal = document.getElementById("modal");
+  modal.parentNode.insertBefore(div, modal.nextSibling);
+};
+
 /**
  * Funcion comun para ejecutar las acciones Fetch
  * de Albums y Canciones y guardarlas en el store

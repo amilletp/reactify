@@ -38,6 +38,8 @@ audio.FloatingPlayer-root.expanded {
   left: 1vw;
   width: 98vw;
   transition: all 1s ease;
+  background-color: #fff;
+  box-shadow: 0 0 18px 2px #303f9f;
 }
 
 #updateApplication {

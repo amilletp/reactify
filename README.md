@@ -25,11 +25,11 @@ A random selection of up to six tracks for the user to choose. Tracks can be pla
 
 ### Temas recientes (Recent tracks)
 
-Tracks the user has played, at the player section, during the current session.
+Last 5 tracks the user has played, at the player section, during the current session.
 
 ### Buscar (Search)
 
-You can search by Album, Track name or Artist. The search applies the filters over the fetched example dataset
+You can search by Album, Track name or Artist. The search applies the filters over the fetched example dataset.
 
 ### Albums
 
@@ -38,17 +38,15 @@ You can click on the album name to see an expanded detail view of the album. Tra
 
 ### Reproductor (Player)
 
-An expanded detail view for a Track. An <audio> player appears. If yo
+An expanded detail view for a Track. An <audio> player appears. If you click on play the player goes into floating mode, docked at the bottom of the page. It will remain in this mode for the rest of the session, though playing can be stopped. It will start playing a new track if you click on it from an Album view.
 
-## Iniciar el proyecto
+## Starting project
 
-El proyecto se inicia directamente con `yarn start`.
+Use `yarn start`
 
-Este comando hace uso de `npm-run-all` que ejecuta el servidor y el cliente al mismo tiempo. El servidor estará escuchando en el puerto 3001 y la aplicación en el 3000. No obstante, la aplicación ya viene preconfigurada con un proxy que redirige cualquier llamada al servidor. Por ejemplo:
+The start srcript runs `npm-run-all` starting server and client at the same time. Listening port is 3001 for server and 3001 for client app.
 
-`/albums -> http://localhost:3001/albums`
+## Credits
 
-## Créditos
-
-- Fotografía de la carátula de los álbums por [James Owen](https://unsplash.com/photos/c-NBiJrhwdM)
-- Audio compuesto por [Kevin MacLeod](https://twitter.com/kmacleod)
+- Albums cover by [James Owen](https://unsplash.com/photos/c-NBiJrhwdM)
+- Audio Track composed by [Kevin MacLeod](https://twitter.com/kmacleod)
