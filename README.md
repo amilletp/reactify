@@ -1,6 +1,7 @@
 # Reactify
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+
 An App developed for a [React-Redux](https://cursos.trainingit.es/course/view.php?id=39) course that reflects a music content service.
 
 Care has been put into making the app navigable across all its sections, either by clicking the top bar menu, or by typing URLs in the browser. The main components are independent from each other and load on their own. They carry out the fetching of data collections. These are served from the backend, the first time, and from cached data by the ServiceWorker in successive calls. Fetching of data is performed only if it is not already present in the Redux store.
@@ -40,11 +41,11 @@ You can click on the album name to see an expanded detail view of the album. Tra
 
 An expanded detail view for a Track. An <audio> player appears. If you click on play the player goes into floating mode, docked at the bottom of the page. It will remain in this mode for the rest of the session, though playing can be stopped. It will start playing a new track if you click on it from an Album view.
 
-## Starting project
+## Running the project
 
 Use `yarn start`
 
-The start srcript runs `npm-run-all` starting server and client at the same time. Listening port is 3001 for server and 3001 for client app.
+The start srcript runs `npm-run-all`, starting server and client at the same time. Listening port is 3001 for server and 3000 for client app.
 
 ## Credits
 
