@@ -32,7 +32,8 @@ let refreshing = false;
 document.getElementById("reload").addEventListener("click", () => {
   // Mandamos el mensaje al worker
   document.getElementById("updateApplication").classList.add("hide");
-  worker.postMessage({ action: "skipWaiting" });
+  // No contiene los metodos ni se ha inicializado en el evento updatefound
+  //worker.postMessage({ action: "skipWaiting" });
 });
 
 // Comprobamos que el navegador lo soporte:
