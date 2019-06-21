@@ -4,7 +4,7 @@
 
 An App developed for a [React-Redux](https://cursos.trainingit.es/course/view.php?id=39) course that reflects a music content service.
 
-Care has been put into making the app navigable across all its sections, either by clicking the top bar menu, or by typing URLs in the browser. The main components are independent from each other and load on their own. They carry out the fetching of data collections. These are served from the backend, the first time, and from cached data by the ServiceWorker in successive calls. Fetching of data is performed only if it is not already present in the Redux store.
+Care has been put into making the app navigable across all its sections, either by clicking the top bar menu, or by typing URLs in the browser. The main components are independent from each other and load on their own. They carry out the fetching of data collections. These are served from the backend, in the first place, and from cached data by the ServiceWorker in successive calls. Fetching is performed only if it is not already present in the Redux store.
 
 Vast majority of the components have been developed as functional, with the use of React Hooks. Except for few cases, such as ErrorBoundary, where much more fine grained control of the lifecycle methods is needed.
 
@@ -45,7 +45,7 @@ An expanded detail view for a Track. An <audio> player appears. If you click on 
 
 Use `yarn start`
 
-The start srcript runs `npm-run-all`, starting server and client at the same time. Listening port is 3001 for server and 3000 for client app.
+The start script runs `npm-run-all`, starting server and client at the same time. Listening port is 3001 for server and 3000 for client app.
 
 ## Credits
 
